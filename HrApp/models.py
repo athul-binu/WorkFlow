@@ -1,6 +1,5 @@
 from django.db import models
 from EmployeeApp.models import Department
-from ManagerApp.models import RecruitmentRequest
 
 class HR(models.Model):
     HRID = models.AutoField(primary_key=True)
@@ -40,7 +39,7 @@ class Applicant(models.Model):
 
 class JobApplication(models.Model):
     ApplicationID = models.AutoField(primary_key=True)
-    RequestID = models.ForeignKey(RecruitmentRequest, on_delete=models.CASCADE)
+    RequestID = models.ForeignKey('ManagerApp.RecruitmentRequest', on_delete=models.CASCADE)
     JobDescription = models.CharField(max_length=100)
     OpenDate = models.DateField()
     CloseDate = models.DateField()

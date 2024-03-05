@@ -1,6 +1,6 @@
 from django.db import models
-from EmployeeApp.models import Employee
 from ManagerApp.models import Manager
+from EmployeeApp.models import Employee
 
 class Admin(models.Model):
     AdminID = models.AutoField(primary_key=True)

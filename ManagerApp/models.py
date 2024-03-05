@@ -1,7 +1,24 @@
 from django.db import models
-from EmployeeApp.models import Skill, Department, Designation, Employee
+from EmployeeApp.models import Skill, Department, Designation
 from HrApp.models import HR
-from AdminApp.models import Admin
+
+class RecruitmentRequest(models.Model):
+    RequestID = models.AutoField(primary_key=True)
+    HRID = models.ForeignKey(HR, on_delete=models.CASCADE)
+    ManagerID = models.ForeignKey('Manager', on_delete=models.CASCADE)
+    JobTitle = models.CharField(max_length=100)
+    TaskDescription = models.TextField()
+    CloseDate = models.DateField()
+    Status = models.CharField(max_length=100)
+    RecruitmentType = models.CharField(max_length=100)
+    Experience = models.CharField(max_length=100)
+    SkillID = models.ManyToManyField(Skill)
+
+    class Meta:
+        db_table = 'recruitment_request'
+
+    def __str__(self):
+        return self.JobTitle
 
 class Manager(models.Model):
     ManagerID = models.AutoField(primary_key=True)
@@ -21,7 +38,6 @@ class Manager(models.Model):
 
     def __str__(self):
         return f"{self.FirstName} {self.LastName}"
-
 
 class Project(models.Model):
     ProjectID = models.AutoField(primary_key=True)
@@ -59,7 +75,7 @@ class Task(models.Model):
 class Team(models.Model):
     TeamID = models.AutoField(primary_key=True)
     TeamName = models.CharField(max_length=100)
-    TeamLead = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    TeamLead = models.ForeignKey('EmployeeApp.Employee', on_delete=models.CASCADE)
     TaskID = models.ForeignKey(Task, on_delete=models.CASCADE)
 
     class Meta:
@@ -71,7 +87,7 @@ class Team(models.Model):
 
 class TeamMembers(models.Model):
     TeamMemberID = models.AutoField(primary_key=True)
-    EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    EmployeeID = models.ForeignKey('EmployeeApp.Employee', on_delete=models.CASCADE)
     Role = models.CharField(max_length=100)
     TeamID = models.ForeignKey(Team, on_delete=models.CASCADE)
 
@@ -80,22 +96,3 @@ class TeamMembers(models.Model):
 
     def __str__(self):
         return f"{self.EmployeeID.FirstName} {self.EmployeeID.LastName}"
-
-
-class RecruitmentRequest(models.Model):
-    RequestID = models.AutoField(primary_key=True)
-    HRID = models.ForeignKey(HR, on_delete=models.CASCADE)
-    ManagerID = models.ForeignKey(Manager, on_delete=models.CASCADE)
-    JobTitle = models.CharField(max_length=100)
-    TaskDescription = models.TextField()
-    CloseDate = models.DateField()
-    Status = models.CharField(max_length=100)
-    RecruitmentType = models.CharField(max_length=100)
-    Experience = models.CharField(max_length=100)
-    SkillID = models.ManyToManyField(Skill)
-
-    class Meta:
-        db_table = 'recruitment_request'
-
-    def __str__(self):
-        return self.JobTitle
