@@ -1,7 +1,4 @@
 from django.db import models
-from ManagerApp.models import *
-
-
 
 class Skill(models.Model):
     SkillID = models.AutoField(primary_key=True)
@@ -14,17 +11,6 @@ class Skill(models.Model):
         return self.SkillName
     
 
-class Designation(models.Model):
-    DesignationID = models.AutoField(primary_key=True)
-    DesignationTitle = models.CharField(max_length=100)
-    DepartmentID = models.ForeignKey(Department, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'Designation'
-
-    def __str__(self):
-        return self.DesignationTitle
-
 
 class Department(models.Model):
     DepartmentID = models.AutoField(primary_key=True)
@@ -35,6 +21,18 @@ class Department(models.Model):
 
     def __str__(self):
         return self.DepartmentName
+
+
+class Designation(models.Model):
+    DesignationID = models.AutoField(primary_key=True)
+    DesignationTitle = models.CharField(max_length=100)
+    DepartmentID = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'Designation'
+
+    def __str__(self):
+        return self.DesignationTitle
 
 
 class Employee(models.Model):
@@ -87,3 +85,14 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"Attendance ID: {self.AttendanceID}, Employee: {self.EmployeeID}"
+class Payroll(models.Model):
+    PayrollID = models.AutoField(primary_key=True)
+    EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    Salary = models.DecimalField(max_digits=10, decimal_places=2)
+    PaymentDate = models.DateField()
+
+    class Meta:
+        db_table = 'payroll'
+
+    def __str__(self):
+        return f"Payroll ID: {self.PayrollID}, Employee: {self.EmployeeID}"

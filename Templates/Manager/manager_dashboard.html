@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{% static 'css/manager_dashboard.css' %}">
+
+</head>
+
+<body style="
+      background-image: url('{% static 'img/backgroundimg.png' %}');
+      width: 100%;
+      background-size: cover;">
+    <div class="wrapper">
+
+        <aside id="sidebar">
+            <div class="container-fluid mx-auto">
+                <p class="fontoflogo ms-4">Workflow</p>
+            </div>
+            <div class="container-sm user-card">
+                <a href="user_profile.html">
+                    <img src="{{manager.image.url}}" alt="User Image" class="user-image">
+                </a>
+
+                <div class="user-info d-sm-none d-md-block d-none d-sm-block d-md-none d-lg-block">
+                    <h3 class="user-name">{{manager.FirstName}} {{manager.LastName}}</h3>
+                    <p class="user-role">Manager</p>
+                </div>
+            </div>
+            <ul class="sidebar-nav nav-pills">
+                <li class="sidebar-item nav-pills">
+                    <a href="manager_dashboard.html" class="sidebar-link nav-link active">
+                        <span class="material-icons md-28 ">
+                            dashboard
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manager_projects.html" class="sidebar-link">
+                        <span class="material-symbols-outlined md-48">
+                            badge
+                        </span>
+                        <span>Projects</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="manager_team.html" class="sidebar-link">
+                        <span class="material-icons">
+                            people
+                        </span>
+                        <span>Team</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manager_tasks.html" class="sidebar-link">
+                        <span class="material-icons">
+                            list
+                        </span>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manager_reports.html" class="sidebar-link">
+                        <span class="material-icons">
+                            assessment
+                        </span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manager_logout.html" class="sidebar-link">
+                        <span class="material-symbols-outlined">
+                            logout
+                        </span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="main p-3">
+            <h1>Manager Dashboard</h1>
+
+            <!-- Manager Overview Section -->
+            <div class="row">
+                <div class="col">
+                    <div class="manager-section">
+                        <h3 class="textWid">Manager Details</h3>
+                        <div class="container">
+                            <p class="manager-label">Manager ID:</p>
+                            <p class="manager-value">M123</p>
+                            <p class="manager-label">Name:</p>
+                            <p class="manager-value">Manager Name</p>
+                            <!-- Add more manager details as needed -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="manager-section">
+                        <h3 class="textWid">Team Overview</h3>
+                        <div class="container">
+                            <p class="manager-label">Total Team Members:</p>
+                            <p class="manager-value">5</p>
+                            <p class="manager-label">Projects in Progress:</p>
+                            <p class="manager-value">3</p>
+                            <!-- Add more team overview details as needed -->
+                        </div>
+                    </div>
+                </div>
+                <article class="table-widget">
+                    <div class="caption">
+                        <h2>Project Overview</h2>
+                        <button class="export-btn" type="button">Export</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Status</th>
+                                <th>Task</th>
+                                <th>Due Date</th>
+                                <th>Team Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="project-rows">
+                            {% for project in projects %}
+                            <tr>
+                                <td>{{ project.ProjectName }} </td>
+                                <!-- Loop through task_data and team_data to display related tasks and teams -->
+                                {% for task in task_data %}
+                                {% for team in team_data %}
+                                {% if task.ProjectID_id == project.ProjectID %}
+                                {% if team.TaskID_id == task.TaskID %}
+                                <td>
+                                    <div class="status">
+                                        <div class="status__circle status--active"></div>{{ task.Status }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="tags">
+                                        <div class="tag tag--dev">
+                                            {{ task.Title }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ task.DueDate }}</td>
+                                <td>{{ team.TeamName }}</td>
+
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+
+
+
+
+                                {% comment %} {% for team in team_data %}
+                                {% if team.TaskID_id == task.TaskID %}
+                                <td>{{ team.TeamName }}</td> {% endcomment %}
+                                {% comment %} {% endif %} {% endcomment %}
+
+                                {% endfor %}
+                                <!-- Add action buttons -->
+                                <td>
+                                    <div class="tags">
+                                        <div class="tag tag--design">View</div>
+                                        <div class="tag tag--marketing">Edit</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </article>
+
+                <!-- Manager Team Members Section -->
+                <!-- <div class="manager-section mt-4">
+                <h3>Team Members</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="name-column">Name</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">
+                                    <div class="profile-card">
+                                        <img src="profile pics\Ellipse 1.png" alt="Avatar" class="avatar">
+                                        <div class="profile-info">
+                                            <p class="name">Team Member 1</p>
+                                            <p class="email">team1@example.com</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Developer</td>
+                                <td>Project A</td>
+                                <td>
+                                    <button class="status-button">
+                                        <span class="btn-font">In Progress</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Add more team members as needed -->
+                </tbody>
+                </table>
+            </div>
+        </div> -->
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+            src = "script.js"
+        </script>
+    <!-- Add your custom scripts if needed -->
+</body>
+
+</html>
