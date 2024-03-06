@@ -44,6 +44,10 @@ class Project(models.Model):
     ProjectName = models.CharField(max_length=100)
     ManagerID = models.ForeignKey(Manager, on_delete=models.CASCADE)
     Description = models.TextField()
+    Status = models.CharField(max_length=100,null=True)
+    Priority = models.CharField(max_length=100,null=True)
+    StartDate = models.DateField(null=True)
+    DueDate = models.DateField(null=True)
 
     class Meta:
         db_table = 'project'
@@ -57,12 +61,6 @@ class Task(models.Model):
     ProjectID = models.ForeignKey(Project, on_delete=models.CASCADE)
     Title = models.CharField(max_length=100)
     Description = models.TextField()
-    Status = models.CharField(max_length=100)
-    Priority = models.CharField(max_length=100)
-    StartDate = models.DateTimeField()
-    DueDate = models.DateTimeField()
-    CompletionDate = models.DateTimeField()
-    Comments = models.TextField()
     SkillID = models.ManyToManyField(Skill)
 
     class Meta:

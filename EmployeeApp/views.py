@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
+from django.contrib import messages
+# from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
-
+from EmployeeApp.models import Employee
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -13,7 +14,8 @@ def login_view(request):
         try:
             manager = Manager.objects.get(Username=username)
         except Manager.DoesNotExist:
-            return HttpResponse("User does not exist")
+            messages.error(request, 'Username does not exist. Please try again.')
+            return redirect("/")
 
         if role == 'admin':
             if password == manager.Password:
@@ -23,7 +25,7 @@ def login_view(request):
                 request.session['role'] = role
                 return redirect('admin_dashboard')  
             else:
-                return HttpResponse("Invalid password")
+                return redirect('/')
         elif role == 'manager':
             if password == manager.Password:
                 # Set session data
@@ -32,7 +34,7 @@ def login_view(request):
                 request.session['role'] = role
                 return redirect('/ManagerDashboard')  # Adjust the URL name as per your project
             else:
-                return HttpResponse("Invalid password")
+                messages.error(request, 'Invalid username or password. Please try again.')
         elif role == 'employee':
             # Assuming you have an 'employee_dashboard' named URL pattern
             request.session['username'] = username
@@ -67,8 +69,10 @@ def ManagerDashboard(request):
     
     # Query projects associated with the manager
     projects = Project.objects.filter(ManagerID=manager)
+    employees = Employee.objects.all()
+    employeesCount = employees.count()
 
-    
+    project_count = projects.count()
     # Initialize empty lists to store task and team data
     task_data = []
     team_data = []
@@ -97,6 +101,8 @@ def ManagerDashboard(request):
         'projects': projects,
         'task_data': task_data,
         'team_data': team_data,
+        'project_count': project_count,
+        'employeesCount':employeesCount,
     }
     print("Projects:", projects)
     print("Task Data:", task_data)
@@ -131,29 +137,29 @@ def project_overview(request, project_id):
 
     return render(request, 'employee_project.html', context)
 
-def create_project(request):
-    if request.method == 'POST':
-        project_form = ProjectForm(request.POST)
-        task_form = TaskForm(request.POST)
-        team_form = TeamForm(request.POST)
-        team_members_form = TeamMembersForm(request.POST)
+# def create_project(request):
+#     if request.method == 'POST':
+#         project_form = ProjectForm(request.POST)
+#         task_form = TaskForm(request.POST)
+#         team_form = TeamForm(request.POST)
+#         team_members_form = TeamMembersForm(request.POST)
 
-        if project_form.is_valid() and task_form.is_valid() and team_form.is_valid() and team_members_form.is_valid():
-            project = project_form.save()
-            task = task_form.save(commit=False)
-            task.ProjectID = project
-            task.save()
-            team = team_form.save(commit=False)
-            team.ProjectID = project
-            team.save()
-            team_members = team_members_form.save(commit=False)
-            team_members.TeamID = team
-            team_members.save()
-            return redirect('project_overview', project_id=project.id)
-    else:
-        project_form = ProjectForm()
-        task_form = TaskForm()
-        team_form = TeamForm()
-        team_members_form = TeamMembersForm()
+#         if project_form.is_valid() and task_form.is_valid() and team_form.is_valid() and team_members_form.is_valid():
+#             project = project_form.save()
+#             task = task_form.save(commit=False)
+#             task.ProjectID = project
+#             task.save()
+#             team = team_form.save(commit=False)
+#             team.ProjectID = project
+#             team.save()
+#             team_members = team_members_form.save(commit=False)
+#             team_members.TeamID = team
+#             team_members.save()
+#             return redirect('project_overview', project_id=project.id)
+#     else:
+#         project_form = ProjectForm()
+#         task_form = TaskForm()
+#         team_form = TeamForm()
+#         team_members_form = TeamMembersForm()
 
-    return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form, 'task_form': task_form, 'team_form': team_form, 'team_members_form': team_members_form})
+#     return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form, 'task_form': task_form, 'team_form': team_form, 'team_members_form': team_members_form})
