@@ -810,8 +810,8 @@ display: none;
 .tag {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  font-weight: 700;
-  color: var(--background);
+  font-weight: 550;
+  color: white;
 }
 
 .tag::first-letter {
@@ -819,7 +819,7 @@ display: none;
 }
 
 .tag--design {
-  background: #0595e2dc;
+  background: radial-gradient(circle at 10% 20%, rgb(59, 149, 237) 0%, rgb(7, 91, 173) 90%);
 }
 
 .tag--QA {
@@ -827,13 +827,73 @@ display: none;
 }
 
 .tag--dev {
-  background: #89b6ff;
+  /* background: radial-gradient(circle at 1.8% 4.8%, rgb(17, 23, 58) 0%, rgb(21, 58, 143) 90%); */
+  /* filter: drop-shadow(0px 1px 10px rgba(0, 0, 0, 0.667)); */
+  background-image: linear-gradient(to right, #0038dc, #0048e2, #0057e6, #0064ea, #1571ec);
 }
 
 .tag--marketing {
-  background: #ffd45e;
+  background: linear-gradient(117.8deg, rgb(240, 19, 77) 22.2%, rgb(228, 0, 124) 88.7%);
 }
 
 .table-widget {
   min-height: 5rem;
+}
+
+
+.action-cell {
+  width: 150px; /* Adjust the width according to your preference */
+}
+
+.action-cell--v {
+  text-align: center;
+  width: 10rem; /*0px; /* Adjust the width according to your preference */
+}
+
+
+
+
+.textWid{
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #1d0000;
+}
+.widgetimg{
+  width: 50px;
+  height: 50px;
+}
+.card {
+  width: 245px;
+  height: 170px;
+  border-radius: 10px;
+  background-position: center;
+  filter: drop-shadow(3px 9px 20px #0000009b);
+  /* transition: border-radius 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); */
+ }
+
+ .large-font {
+  font-size: 2em; /* Adjust as needed */
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+}
+
+.widgettxt{
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: rgb(255, 255, 255);
+}
+
+.tabletxt{
+  font-weight: bold;
+  font-size: 1.0rem;
+}
+
+
+
+.card-hover {
+  transition: transform 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: scale(1.08); /* Adjust scale factor as needed */
 }

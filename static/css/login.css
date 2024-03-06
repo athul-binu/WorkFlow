@@ -1,0 +1,31 @@
+
+
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#loginForm {
+    max-width: 400px; /* Adjust the width as needed */
+    width: 100%;
+}
+
+label {
+    color: white;
+}
+
+h2 {
+    color: white;
+}
+
+.container-fluid span
+{
+    color: white;
+}
+a {
+    text-decoration: none;
+    color: rgb(0, 183, 255); /* Optionally set the link color */
+}
