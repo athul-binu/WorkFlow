@@ -89,34 +89,43 @@
       </aside>
 
       <!-- Main Content Area -->
-      <div class="main p-3">
+      <div class="main p-3 text-white">
         <h1>Project Overview</h1>
         <h1>Create Project</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                {{ project_form.ProjectName.label_tag }}
-                {{ project_form.ProjectName }}
-                {{ project_form.ProjectName.errors }}
-            </div>
-            <div class="mb-3">
-                {{ project_form.Description.label_tag }}
-                {{ project_form.Description }}
-                {{ project_form.Description.errors }}
-            </div>
-            <div class="mb-3">
-                {{ task_form.Title.label_tag }}
-                {{ task_form.Title }}
-                {{ task_form.Title.errors }}
-            </div>
-            <div class="mb-3">
-                {{ task_form.Description.label_tag }}
-                {{ task_form.Description }}
-                {{ task_form.Description.errors }}
-            </div>
+        <!-- Include form tags and fields here -->
+        <form method="post" class="mt-5">
+          {% csrf_token %}
+          <div class="mb-3">
+              <label for="ProjectName" class="form-label">Project Name</label>
+              {{ project_form.ProjectName }}
+          </div>
+          <div class="mb-3">
+              <label for="Description" class="form-label">Description</label>
+              {{ project_form.Description }}
+          </div>
+          <div class="mb-3">
+              <label for="Status" class="form-label">Status</label>
+              {{ project_form.Status }}
+          </div>
+          <div class="mb-3">
+              <label for="Priority" class="form-label">Priority</label>
+              {{ project_form.Priority }}
+          </div>
+          <div class="mb-3">
+              <label for="StartDate" class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="StartDate" name="StartDate">
+          </div>
+          <div class="mb-3">
+              <label for="DueDate" class="form-label">Due Date</label>
+              <input type="date" class="form-control" id="DueDate" name="DueDate">
+          </div>
+      
+          <!-- Add more fields as needed -->
+      
+          <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
             <!-- Add more fields as needed -->
-            <button type="submit" class="btn btn-primary">Create Project</button>
-        </form>
 
       </div>
     </div>

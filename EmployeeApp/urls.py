@@ -5,7 +5,13 @@ from EmployeeApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_view, name='login'),
-    path('/logout', views.logout_view, name='logout'),
-    # path('project/', views.create_project, name='project_overview'),
+    path('logout/', views.logout_view, name='logout'),
+    path('project/<int:project_id>/', views.project_overview, name='project_overview'),
     path('ManagerDashboard/', views.ManagerDashboard, name='ManagerDashboard'),
+    path('ManagerProject/', views.ManagerProject, name='ManagerProject'),
+    path('ManagerTeam/', views.ManagerTeam, name='ManagerTeam'),
+    path('ManagerTask/', views.ManagerTask, name='ManagerTask'),
+    path('ManagerProjectAdd/', views.CreateProject, name='ManagerProjectAdd'),
+    path('ManagerProjectTask/', views.CreateTask, name='ManagerProjectTask'),
+    path('ManagerProjectTeam/', views.CreateTeam, name='ManagerProjectTeam'),
 ]
