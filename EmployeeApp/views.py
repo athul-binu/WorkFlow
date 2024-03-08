@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-# from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
+from django.db.models import Q
+from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
 from EmployeeApp.models import Employee
 def login_view(request):
@@ -111,41 +112,279 @@ def ManagerDashboard(request):
     return render(request, "Manager/manager_dashboard.html", context)
 
 
+def ManagerProject(request):
+    # Retrieve the username from the session
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    
+    # Query projects associated with the manager
+    projects = Project.objects.filter(ManagerID=manager)
+    
+    # Initialize empty lists to store task and team data
+    task_data = []
+    team_data = []
+    
+    # Iterate through each project to retrieve associated tasks and teams
+    for project in projects:
+        tasks = Task.objects.filter(ProjectID=project.ProjectID)
+        for task in tasks:
+            # Retrieve teams associated with the current task
+            teams = Team.objects.filter(TaskID=task.TaskID)
+            # Extend the team_data list with teams
+            team_data.extend(teams)
+        # Extend the task_data list with tasks
+        task_data.extend(tasks)
+        
+    context = {
+        'manager': manager,
+        'projects': projects,
+        'task_data': task_data,
+        'team_data': team_data,
+    }
+    
+    if request.method == "POST":
+        searchdata = request.POST.get("search")
+        projects = Project.objects.filter(Q(ProjectID__icontains=searchdata) | Q(task__Title__icontains=searchdata) | Q(task__team__TeamName__icontains=searchdata) | Q(task__team__TeamLead__FirstName__icontains=searchdata) | Q(task__team__TeamLead__LastName__icontains=searchdata))
+        
+        # Clear task_data and team_data before populating them with search results
+        task_data.clear()
+        team_data.clear()
+        
+        for project in projects:
+            tasks = Task.objects.filter(ProjectID=project.ProjectID)
+            for task in tasks:
+                teams = Team.objects.filter(TaskID=task.TaskID)
+                team_data.extend(teams)
+            task_data.extend(tasks)
+            
+        context = {
+            'manager': manager,
+            'projects': projects,
+            'task_data': task_data,
+            'team_data': team_data,
+        }
+        
+    return render(request, "Manager/manager_projectoverview.html", context)
+
+
+
+def ManagerTeam(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    
+    # Query projects associated with the manager
+    team_members = []  # Initialize empty list to store team members
+    
+    projects = Project.objects.filter(ManagerID=manager)
+    for project in projects:
+        # Query team members associated with the current project
+        project_team_members = TeamMembers.objects.filter(TeamID__TaskID__ProjectID=project)
+        # Extend the list of team members with those from the current project
+        team_members.extend(project_team_members)
+    
+    # Print the team members for debugging purposes
+    print(team_members)
+    
+
+    if request.method == 'POST':
+        searchdata = request.POST.get("search")
+        team_members.clear()
+        project_team_members = TeamMembers.objects.filter(Q(EmployeeID__FirstName__icontains=searchdata)|Q(TeamID__TeamName__icontains=searchdata)|Q(EmployeeID__Email__icontains=searchdata))
+        # Extend the list of team members with those from the current project
+        team_members.extend(project_team_members)
+    context = {
+        'manager': manager,
+        'projects': projects,
+        'users': team_members,  # Pass the list of team members to the template
+    }
+        
+    return render(request, "Manager/manager_team.html", context)
+
+
+
+
+
+
+def ManagerTask(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    projects = Project.objects.filter(ManagerID=manager)
+    managertaskdata=[]
+    for project in projects:
+        manager_tasks = Task.objects.filter(ProjectID=project)
+        managertaskdata.extend(manager_tasks)
+        print(manager_tasks)
+    
+    content ={
+        "manager_tasks": managertaskdata,
+        'manager': manager,
+    }
+    return render(request,"Manager/manager_Task.html",content)
 
 
 
 
 def project_overview(request, project_id):
+    
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
     # Retrieve project details
     project = Project.objects.get(ProjectID=project_id)
 
     # Retrieve tasks related to the project
-    tasks = Task.objects.filter(ProjectID=project)
-
+    tasks = Task.objects.filter(ProjectID=project_id)
+    datateam=[]
     # Retrieve team related to the project
-    team = Team.objects.get(ProjectID=project)
+        # team = Team.objects.filter(TaskID=task.TaskID)
+    team = Team.objects.filter(TaskID__ProjectID=project_id)
+    print("team:",team)
+    for team in team:
+        team_members = TeamMembers.objects.filter(TeamID=team.TeamID)
+            
 
     # Retrieve team members related to the team
-    team_members = TeamMembers.objects.filter(TeamID=team)
+    
 
     context = {
+        'manager': manager,
         'project': project,
         'tasks': tasks,
         'team': team,
         'team_members': team_members
     }
 
-    return render(request, 'employee_project.html', context)
+    return render(request, 'Manager/manager_project.html', context)
+def CreateProject(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    if request.method == 'POST':
+        
+        project_form = ProjectForm(request.POST)
 
-# def create_project(request):
-#     if request.method == 'POST':
-#         project_form = ProjectForm(request.POST)
-#         task_form = TaskForm(request.POST)
+        if project_form.is_valid():
+            project = project_form.save(commit=False)
+            project.ManagerID = manager
+            project.save()
+
+            return redirect('/ManagerProject')
+    else:
+        project_form = ProjectForm()
+
+
+    return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form})
+
+
+    
+def CreateTask(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    project=Project.objects.filter(ManagerID=manager)
+    if request.method == 'POST':
+        
+        task_form = TaskForm(request.POST)
+
+        if task_form.is_valid():
+            task = task_form.save(commit=False)
+            task.save()
+
+            return redirect('/ManagerProject')
+    else:
+        task_form = TaskForm()
+
+
+    return render(request, 'Manager/manager_taskadd.html', {'task_form': task_form,'project': project})
+
+
+def CreateTeam(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    taskdata=[]
+    project=Project.objects.filter(ManagerID=manager)
+    employee=Employee.objects.all()
+    for project in project:
+        task = Task.objects.filter(ProjectID=project)
+        taskdata.extend(task)
+    if request.method == 'POST':
+        
+        team_form = TeamForm(request.POST)
+
+        if team_form.is_valid():
+            team = team_form.save(commit=False)
+            team.save()
+
+            return redirect('/ManagerProject')
+    else:
+        team_form = TeamForm()
+    content={
+        'manager':manager,
+        'team_form': team_form,
+        'project': project,
+        'employee': employee,
+        'task': taskdata
+    }
+
+    return render(request, 'Manager/manager_teamadd.html',content)
+
+
+
+
+
+
+
+# def CreateTask(request):
+        
 #         team_form = TeamForm(request.POST)
 #         team_members_form = TeamMembersForm(request.POST)
 
-#         if project_form.is_valid() and task_form.is_valid() and team_form.is_valid() and team_members_form.is_valid():
-#             project = project_form.save()
+#  team_form.is_valid() and team_members_form.is_valid():
 #             task = task_form.save(commit=False)
 #             task.ProjectID = project
 #             task.save()
@@ -155,11 +394,15 @@ def project_overview(request, project_id):
 #             team_members = team_members_form.save(commit=False)
 #             team_members.TeamID = team
 #             team_members.save()
-#             return redirect('project_overview', project_id=project.id)
-#     else:
-#         project_form = ProjectForm()
-#         task_form = TaskForm()
+            
+            
+            
+#                     task_form = TaskForm()
 #         team_form = TeamForm()
 #         team_members_form = TeamMembersForm()
-
-#     return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form, 'task_form': task_form, 'team_form': team_form, 'team_members_form': team_members_form})
+        
+        
+#         return render request(, 'team_form': team_form, 'team_members_form': team_members_form)
+    
+    
+    

@@ -42,6 +42,7 @@ class Manager(models.Model):
 class Project(models.Model):
     ProjectID = models.AutoField(primary_key=True)
     ProjectName = models.CharField(max_length=100)
+    ProjectLead=models.ForeignKey('EmployeeApp.Employee',on_delete=models.CASCADE,null=True)
     ManagerID = models.ForeignKey(Manager, on_delete=models.CASCADE)
     Description = models.TextField()
     Status = models.CharField(max_length=100,null=True)

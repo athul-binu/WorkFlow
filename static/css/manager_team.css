@@ -411,8 +411,8 @@ display: none;
   }
   
   .user-image {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
   }
   
@@ -684,7 +684,7 @@ display: none;
 
 .table-widget {
   border-radius: 1rem;
-  background: var(--table-background);
+  /* background: var(--table-background); */
   padding: 1.5rem;
   text-align: left;
   overflow-x: auto;
@@ -737,6 +737,7 @@ display: none;
 
 .table-widget td {
   padding: 1rem;
+  width: 20rem;
   background: transparent;
   color: white;
   vertical-align: middle;
@@ -922,28 +923,9 @@ button{
   align-items: center;
 }
 
-/* Custom CSS for tabs */
-.nav-tabs {
-  margin-top: 20px;
-}
 
-.nav-tabs .nav-item {
-  margin-bottom: 0;
-}
-
-.nav-tabs .nav-link {
-  /* background-color: #343a40; */
-  color: rgb(255, 255, 255);
-  border: 0px solid #ffffff;
-  border-radius: 1px ;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #005eff;
-  color: #ffffff;
-  border-color: #dee2e6 #dee2e6 #f8f9fa;
-}
-
-.tab-content {
-  margin-top: 20px;
+.user-image2 {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }

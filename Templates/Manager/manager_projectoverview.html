@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="{% static 'css/manager_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/manager_projectoverview.css' %}">
 
 </head>
 
@@ -39,7 +39,7 @@
             </div>
             <ul class="sidebar-nav nav-pills">
                 <li class="sidebar-item nav-pills">
-                    <a href="manager_dashboard.html" class="sidebar-link nav-link active">
+                    <a href="/ManagerDashboard" class="sidebar-link ">
                         <span class="material-icons md-28 ">
                             dashboard
                         </span>
@@ -47,7 +47,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/ManagerProject" class="sidebar-link">
+                    <a href="/ManagerProject" class="sidebar-link nav-link active">
                         <span class="material-symbols-outlined md-48">
                             badge
                         </span>
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/ManagerTask" class="sidebar-link">
+                    <a href="/managerTask" class="sidebar-link">
                         <span class="material-icons">
                             list
                         </span>
@@ -72,7 +72,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="" class="sidebar-link">
+                    <a href="manager_reports.html" class="sidebar-link">
                         <span class="material-icons">
                             assessment
                         </span>
@@ -91,56 +91,21 @@
         </aside>
 
         <div class="main p-3">
-            <h1>Manager Dashboard</h1>
-                
-            <div class="row mt-4 ">
-                <div class="col mb-3">
-                    <div class="card  card-hover" style="background-image: url('{% static 'img/20.png' %}');
-                    background-position: center; background-size:400px;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon2.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Active Employees</p>
-                        <span class="large-font ms-3">{{employeesCount}}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/PrismGradient.png' %}');
-                    background-position: center;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon1.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Ongoing Projects</p>
-                        <span class="large-font ms-3">{{project_count}}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/14.png' %}');
-                    background-position:  center;   background-size: 400px;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon3.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Leave Request</p>
-                        <span class="large-font ms-3">8</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/32.png' %}');
-                    background-position: center;background-size: 400px; ">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon4.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">HR Response</p>
-                        <span class="large-font ms-3">8</span>
-                      </div>
-                    </div>
-                  </div>
-            </div>
+            <h1>Project Overview</h1>   
             
+                <div class="addp  mt-2 ms-2">
+                    <button class=" tag tag--dev me-3">Add Project</button>
+                </div>
+                    <div class="datatravel">
+                    <form method="POST" class="d-flex tags">
+                        {% csrf_token %}
+                        <input class="form-control me-2 transparent-input" type="search" placeholder="Search" aria-label="Search" id="search-input" name="search">
+                        <button class="tag tag--dev" type="submit">Search</button>
+                    </form>
+                
+            </div>
                 <article class="table-widget">
-                    <div class="caption">
-                        <h2>Project Overview</h2>
-                        <button class="export-btn" type="button">Export</button>
-                    </div>
+
                     <table>
                         <thead>
                             <tr>
@@ -214,8 +179,6 @@
             </tbody>
         </table>
     </div>
-</div>
-</div>
 </div>
 <!-- Manager Overview Section -->
             {% comment %} <div class="row">

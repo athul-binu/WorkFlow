@@ -1,22 +1,24 @@
-# from django import forms
-# from ManagerApp.models import Project, Task, Team, TeamMembers
+from django import forms
+from ManagerApp.models import Project, Task, Team, TeamMembers
+from EmployeeApp.models import Skill
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['ProjectName', 'Description', 'Status', 'Priority', 'StartDate', 'DueDate']
 
-# class ProjectForm(forms.ModelForm):
-#     class Meta:
-#         model = Project
-#         fields = ['ProjectName', 'Description']
+class TaskForm(forms.ModelForm):
+    SkillID = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(), widget=forms.CheckboxSelectMultiple)
+    
+    class Meta:
+        model = Task
+        fields = ['ProjectID','Title', 'Description','SkillID']
 
-# class TaskForm(forms.ModelForm):
-#     class Meta:
-#         model = Task
-#         fields = ['Title', 'Description', 'Status', 'Priority', 'StartDate', 'DueDate', 'CompletionDate', 'Comments', 'SkillID']
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ['TaskID','TeamName', 'TeamLead']
 
-# class TeamForm(forms.ModelForm):
-#     class Meta:
-#         model = Team
-#         fields = ['TeamName', 'TeamLead', 'TaskID']
-
-# class TeamMembersForm(forms.ModelForm):
-#     class Meta:
-#         model = TeamMembers
-#         fields = ['EmployeeID', 'Role', 'TeamID']
+class TeamMembersForm(forms.ModelForm):
+    class Meta:
+        model = TeamMembers
+        fields = ['EmployeeID', 'Role']
