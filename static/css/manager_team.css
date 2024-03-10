@@ -179,10 +179,13 @@ a.sidebar-link:hover {
 }
 
 .nav-pills .nav-link.active {
-  background-color: #1e43ff;
+  background-color: #ffffff;
+  color: #000000;
   border-radius: 0px;
+  
 
 }
+
 
 
 .material-icons {
@@ -197,6 +200,11 @@ a.sidebar-link:hover {
     word-wrap: normal;
     white-space: nowrap;
     direction: ltr;
+    background: linear-gradient( #452ce7 0%,#1295ff 100%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+   -webkit-text-fill-color:transparent;
   
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: antialiased;
@@ -217,6 +225,11 @@ a.sidebar-link:hover {
 .material-icons.md-48 { font-size: 48px; }
 
 .material-symbols-outlined {
+  background: linear-gradient( #452ce7 0%,#1295ff 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+ -webkit-text-fill-color:transparent;
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
@@ -411,8 +424,8 @@ display: none;
   }
   
   .user-image {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
   }
   
@@ -672,15 +685,6 @@ display: none;
   --th-background: #2e2b4344;
 }
 
-/* body {
-  font-family: Poppins, sans-serif;
-  margin: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: var(--background);
-} */
 
 .table-widget {
   border-radius: 1rem;

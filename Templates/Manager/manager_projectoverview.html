@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -94,7 +93,10 @@
             <h1>Project Overview</h1>   
             
                 <div class="addp  mt-2 ms-2">
-                    <button class=" tag tag--dev me-3">Add Project</button>
+                    <button class=" tag tag--dev me-3">
+                        <a href="/ManagerProjectAdd">Add Project</a>
+
+                    </button>
                 </div>
                     <div class="datatravel">
                     <form method="POST" class="d-flex tags">
@@ -167,7 +169,7 @@
                                 <td>
                                     <div class="tags action-cell">
                                         <a href="{% url 'project_overview' project.ProjectID %}" class="tag tag--design action-cell--v">View</a>
-                                        <a href="{% url 'project_overview' project.ProjectID %}" class="tag tag--marketing action-cell--v">Edit</a>
+                                        <a href="{% url 'ManagerProjectEdit' project.ProjectID %}?next={{ request.path }}" class="tag tag--marketing action-cell--v">Edit</a>
                                     </div>
                                 </td>
                             </tr>

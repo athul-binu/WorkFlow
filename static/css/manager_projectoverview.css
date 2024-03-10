@@ -177,14 +177,18 @@ a.sidebar-link:hover {
     transform: rotate(45deg);
     transition: all .2s ease-out;
 }
-
 .nav-pills .nav-link.active {
-  background-color: #1e43ff;
+  background-color: #ffffff;
+  color: #000000;
   border-radius: 0px;
+  
 
 }
 
-
+a
+{
+  color: white;
+}
 .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;
@@ -197,6 +201,11 @@ a.sidebar-link:hover {
     word-wrap: normal;
     white-space: nowrap;
     direction: ltr;
+        background: linear-gradient( #452ce7 0%,#1295ff 100%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+   -webkit-text-fill-color:transparent;
   
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: antialiased;
@@ -217,6 +226,11 @@ a.sidebar-link:hover {
 .material-icons.md-48 { font-size: 48px; }
 
 .material-symbols-outlined {
+  background: linear-gradient( #452ce7 0%,#1295ff 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+ -webkit-text-fill-color:transparent;
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
@@ -923,26 +937,11 @@ button{
 }
 
 /* Custom CSS for tabs */
-.nav-tabs {
-  margin-top: 20px;
-}
 
-.nav-tabs .nav-item {
-  margin-bottom: 0;
-}
 
-.nav-tabs .nav-link {
-  /* background-color: #343a40; */
-  color: rgb(255, 255, 255);
-  border: 0px solid #ffffff;
-  border-radius: 1px ;
-}
 
-.nav-tabs .nav-link.active {
-  background-color: #005eff;
-  color: #ffffff;
-  border-color: #dee2e6 #dee2e6 #f8f9fa;
-}
+
+
 
 .tab-content {
   margin-top: 20px;
