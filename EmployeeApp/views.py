@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
@@ -6,6 +6,8 @@ from django.db.models import Q
 from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
 from EmployeeApp.models import Employee
+from django.urls import reverse
+from django.forms import modelformset_factory
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -303,9 +305,14 @@ def CreateProject(request):
             return redirect('/ManagerProject')
     else:
         project_form = ProjectForm()
-
-
-    return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form})
+    context ={
+        'manager': manager,
+        'project_form': project_form,
+        
+        
+        }
+    
+    return render(request, 'Manager/manager_projectadd.html', context)
 
 
     
@@ -372,6 +379,80 @@ def CreateTeam(request):
     }
 
     return render(request, 'Manager/manager_teamadd.html',content)
+
+
+
+
+def edit_project(request, project_id):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    
+    project = Project.objects.get(ProjectID=project_id)
+    if request.method == 'POST':
+        project_form = ProjectForm(request.POST, instance=project)
+
+        if project_form.is_valid():
+            project_form.save()
+            next_url = request.GET.get('next')
+            return redirect(next_url)
+    else:
+        project_form = ProjectForm(instance=project)
+    return render(request, 'Manager/manager_projectadd.html', {'project_form': project_form,'manager':manager})
+
+from django.forms import modelformset_factory
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
+from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
+
+def edit_project(request, project_id):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+
+    project = get_object_or_404(Project, pk=project_id)
+    tasks = Task.objects.filter(ProjectID=project_id)
+    TaskFormSet = modelformset_factory(Task, form=TaskForm, extra=1)
+    TeamFormSet = modelformset_factory(Team, form=TeamForm, extra=1)
+    TeamMembersFormSet = modelformset_factory(TeamMembers, form=TeamMembersForm, extra=1)
+
+    if request.method == 'POST':
+        project_form = ProjectForm(request.POST, instance=project)
+        task_formset = TaskFormSet(request.POST, queryset=Task.objects.filter(ProjectID=project))
+        team_formsets = [TeamFormSet(request.POST, queryset=Team.objects.filter(TaskID=task.TaskID)) for task in tasks]
+        team_members_formsets = [TeamMembersFormSet(request.POST, queryset=TeamMembers.objects.filter(TeamID__in=Team.objects.filter(TaskID=task.TaskID))) for task in tasks]
+        project_form.save()
+        task_formset.save()
+        for formset in team_formsets:
+            formset.save()
+        for formset in team_members_formsets:
+            formset.save()
+        return redirect('/ManagerDashboard')  # Redirect to dashboard or other appropriate page
+    else:
+        project_form = ProjectForm(instance=project)
+        task_formset = TaskFormSet(queryset=Task.objects.filter(ProjectID=project))
+        team_formsets = [TeamFormSet(queryset=Team.objects.filter(TaskID=task.TaskID)) for task in tasks]
+        team_members_formsets = [TeamMembersFormSet(queryset=TeamMembers.objects.filter(TeamID__in=Team.objects.filter(TaskID=task.TaskID))) for task in tasks]
+
+    return render(request, 'Manager/test.html', {
+        'project_form': project_form,
+        'task_formset': task_formset,
+        'team_formsets': team_formsets,
+        'team_members_formsets': team_members_formsets,
+        'manager': manager
+    })
 
 
 

@@ -14,4 +14,7 @@ urlpatterns = [
     path('ManagerProjectAdd/', views.CreateProject, name='ManagerProjectAdd'),
     path('ManagerProjectTask/', views.CreateTask, name='ManagerProjectTask'),
     path('ManagerProjectTeam/', views.CreateTeam, name='ManagerProjectTeam'),
+    path('ManagerProjectEdit/<int:project_id>', views.edit_project, name='ManagerProjectEdit'),
+     path('edit_project/<int:project_id>/', views.edit_project, name='edit_project'),
+
 ]
