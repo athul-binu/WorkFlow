@@ -1,7 +1,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,15 +100,14 @@
 
       <!-- Main Content Area -->
       <div class="main p-3 text-white">
-        <h1>Project Overview</h1>
-        <h1>Create Project</h1>
+        <h1>Create Team</h1>
         <!-- Include form tags and fields here -->
         <div class="row">
             <form method="post" class="mt-3 ">
                 {% csrf_token %}
                 <div class="col-md-6">
                     <div class="ms-4 mb-3 ">
-                        {% crispy project_form %}
+                        {% crispy team_form %}
                     </div>
                 </div>
             </form>

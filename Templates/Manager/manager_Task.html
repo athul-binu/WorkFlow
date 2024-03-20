@@ -1,31 +1,22 @@
 {% load static %}
-{% load crispy_forms_tags %}
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Project</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link rel="stylesheet" href="{% static 'css/manager_dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{% static 'css/manager_team.css' %}">
+
 </head>
+
 <body style="
       background-image: url('{% static 'img/backgroundimg.png' %}');
       width: 100%;
@@ -56,7 +47,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/ManagerProject" class="sidebar-link nav-link active">
+                    <a href="/ManagerProject" class="sidebar-link ">
                         <span class="material-symbols-outlined md-48">
                             badge
                         </span>
@@ -65,7 +56,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="/ManagerTeam" class="sidebar-link">
+                    <a href="/ManagerTeam" class="sidebar-link ">
                         <span class="material-icons">
                             people
                         </span>
@@ -73,7 +64,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/managerTask" class="sidebar-link">
+                    <a href="/ManagerTask" class="sidebar-link nav-link active">
                         <span class="material-icons">
                             list
                         </span>
@@ -99,29 +90,38 @@
             </ul>
         </aside>
 
-      <!-- Main Content Area -->
-      <div class="main p-3 text-white">
-        <h1>Project Overview</h1>
-        <h1>Create Project</h1>
-        <!-- Include form tags and fields here -->
-        <div class="row">
-            <form method="post" class="mt-3 ">
-                {% csrf_token %}
-                <div class="col-md-6">
-                    <div class="ms-4 mb-3 ">
-                        {% crispy project_form %}
+        <div class="main p-3">
+            <h1>Task</h1>
+            <div class=" mt-2 ms-2">
+                <button class=" tag tag--dev me-3 mb-4">
+                    <a class="text-white"href="/ManagerProjectTask">Add Task</a>
+
+                </button>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for task in manager_tasks %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fs-3 fw-bold">{{ task.Title }}</h5>
+                            <p class="card-text">{{ task.Description }}</p>
+                            <!-- Add any other task information you want to display -->
+                            <p class="card-text"><small class="text-muted">Assigned to: {{ task.ProjectID    }}</small></p>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </form>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-      </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-      crossorigin="anonymous"
-    ></script>
-    <script src="manager_script.js"></script>
+    </div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+            src = "script.js"
+        </script>
 </body>
+
 </html>
