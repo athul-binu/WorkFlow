@@ -3,7 +3,7 @@
 <p align="center"><img src="https://socialify.git.ci/athul-binu/WorkFlow/image?font=Inter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Plus&amp;theme=Auto" alt="project-image"></p>
 
 ## Overview:
-WorkFlow is a web-based project management system designed to streamline project management tasks for organizations. It provides features for managers, employees, and HR personnel to efficiently manage projects, tasks, team members, recruitment, attendance, and performance reviews.
+WorkFlow is a web-based Employee management system designed to streamline Employee management tasks for organizations. It provides features for managers, employees, and HR personnel to efficiently manage projects, tasks, team members, recruitment, attendance, and performance reviews.
 
 ## Features:
 - **Manager Dashboard:** Provides a centralized dashboard for managers to oversee project progress, team activities, and generate reports.
