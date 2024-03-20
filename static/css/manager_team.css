@@ -187,6 +187,7 @@ a.sidebar-link:hover {
 }
 
 
+
 .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;
@@ -224,7 +225,11 @@ a.sidebar-link:hover {
 .material-icons.md-48 { font-size: 48px; }
 
 .material-symbols-outlined {
-  
+  background: linear-gradient( #452ce7 0%,#1295ff 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+ -webkit-text-fill-color:transparent;
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
@@ -680,19 +685,10 @@ display: none;
   --th-background: #2e2b4344;
 }
 
-/* body {
-  font-family: Poppins, sans-serif;
-  margin: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: var(--background);
-} */
 
 .table-widget {
   border-radius: 1rem;
-  background: var(--table-background);
+  /* background: var(--table-background); */
   padding: 1.5rem;
   text-align: left;
   overflow-x: auto;
@@ -701,12 +697,13 @@ display: none;
 }
 
 .table-widget table {
-width: 80rem;
+  max-width: fit-content;
+  border-collapse: collapse;
 }
 
 
 .table-widget thead tr {
-  background: rgba(0, 0, 0, 0.17);
+  background: var(--th-background);
 }
 
 .table-widget .caption {
@@ -736,7 +733,7 @@ width: 80rem;
 }
 
 .table-widget th {
-  padding: 1rem 1rem;
+  padding: 1.25rem 1rem;
   font-size: 1.05rem;
   font-weight: 800;
   vertical-align: middle;
@@ -744,6 +741,7 @@ width: 80rem;
 
 .table-widget td {
   padding: 1rem;
+  width: 20rem;
   background: transparent;
   color: white;
   vertical-align: middle;
@@ -857,24 +855,6 @@ width: 80rem;
   width: 10rem; /*0px; /* Adjust the width according to your preference */
 }
 
-.material-symbols-outlined {
-  /* Set the gradient as the color */
-
-  background: linear-gradient( #452ce7 0%,#1295ff 100%);
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  background-clip: text;
- -webkit-text-fill-color:transparent;
- 
-  
-  /* Set font-variation-settings */
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
 
 
 
@@ -914,11 +894,42 @@ width: 80rem;
 }
 
 
+/* Search box styling */
+.datatravel {
+  display: flex;
+  justify-content: right;
+  align-items: center;
 
-.card-hover {
-  transition: transform 0.3s ease;
+}
+.justsd
+{
+  background-color: rgba(230, 219, 219, 0.466);
 }
 
-.card-hover:hover {
-  transform: scale(1.08); /* Adjust scale factor as needed */
+
+button{
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
+.transparent-input {
+  border: none;
+  background-color: rgba(239, 232, 232, 0.508); /* Adjust the alpha value (last parameter) for transparency */
+}
+
+
+.addp{
+  position: absolute;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+
+.user-image2 {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }
