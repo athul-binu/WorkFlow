@@ -21,3 +21,9 @@ WorkFlow is a web-based Employee management system designed to streamline Employ
 - **Frontend:** HTML, CSS, JavaScript,Bootstrap
 - **Database:** MYSQL
 - **Version Control:** Git, GitHub
+## Project Screenshots:
+![Screenshot 1](https://github.com/athul-binu/WorkFlow/assets/76248875/b26ee644-0090-4289-8a8d-cbe2467f3633)
+![Screenshot 2](https://github.com/athul-binu/WorkFlow/assets/76248875/5b6893a5-34ba-4742-9e8c-2cd5643ebd42)
+![Screenshot 3](https://github.com/athul-binu/WorkFlow/assets/76248875/39c49025-9935-441e-8009-a23b93c3b3f8)
+![Screenshot 4](https://github.com/athul-binu/WorkFlow/assets/76248875/56bf9629-b905-4905-b25d-2bd9ced7b61b)
+![Screenshot 5](https://github.com/athul-binu/WorkFlow/assets/76248875/25a050c7-0b42-4045-b7c2-54809af5dda6)
