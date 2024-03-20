@@ -40,6 +40,8 @@ class Employee(models.Model):
     image = models.ImageField(upload_to='profilepics/', null=True)
     FirstName = models.CharField(max_length=100)
     LastName = models.CharField(max_length=100)
+    Username = models.CharField(max_length=100,null=True,unique=True)
+    Password = models.CharField(max_length=100,null=True)
     Email = models.EmailField()
     PhoneNumber = models.CharField(max_length=15)
     DOB = models.DateField()
@@ -96,3 +98,37 @@ class Payroll(models.Model):
 
     def __str__(self):
         return f"Payroll ID: {self.PayrollID}, Employee: {self.EmployeeID}"
+    
+    
+    
+class Event(models.Model):
+    EventID = models.AutoField(primary_key=True)
+    ManagerID = models.ForeignKey('ManagerApp.Manager',on_delete=models.CASCADE)
+    EmployeeID = models.ForeignKey(Employee,on_delete=models.CASCADE,null=True)
+    EventName = models.CharField(max_length=100)
+    EventDescription = models.TextField()
+    EventPriority = models.CharField(max_length=100)
+    EventDate = models.DateTimeField()
+    
+    
+    class Meta:
+        db_table='Event'
+    def __str__(self):
+        return f"Event Name: {self.EventName}"
+    
+class ScheduledEvent(models.Model):
+    ScheduledEventID = models.AutoField(primary_key=True)
+    ManagerID = models.ForeignKey('ManagerApp.Manager',on_delete=models.CASCADE)
+    EmployeeID = models.ForeignKey(Employee,on_delete=models.CASCADE,null=True)
+    ScheduledEventName = models.CharField(max_length=255)
+    ScheduledEventDescription = models.CharField(max_length=255,null=True)
+    ScheduledEventPriority = models.CharField(max_length=255)
+    ScheduledEventDate = models.DateTimeField()
+    
+    class Meta:
+        db_table="ScheduledEvent"
+        
+        
+    def __str__(self):
+        return f"Scheduled Name: {self.ScheduledEventName}"
+    

@@ -29,7 +29,7 @@ class TaskForm(forms.ModelForm):
         super(TaskForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 class TeamForm(forms.ModelForm):
     class Meta:
@@ -40,7 +40,7 @@ class TeamForm(forms.ModelForm):
         super(TeamForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 class TeamMembersForm(forms.ModelForm):
     EmployeeID = Employee.objects.all()
@@ -53,4 +53,4 @@ class TeamMembersForm(forms.ModelForm):
         super(TeamMembersForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Submit'))
