@@ -485,7 +485,11 @@ display: none;
   font-weight:bold;
 }
 
-
+.textWid2{
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #008cffef;
+}
 
 
 
@@ -621,7 +625,7 @@ align-items: center;
 .eventWidget3{
   
   width: 280px;
-  height: 270px;
+  height: 480px;
   background-color: #FFF;
   border: 1px solid rgba(95, 93, 93, 0.173);
   box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
@@ -723,3 +727,56 @@ align-items: center;
 }
 
 
+#calendar {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  width: 60rem;
+  height: 30rem;
+  border-radius: 8px;
+} 
+
+.fc-day {
+  background-color: rgba(255, 255, 255, 0.193); /* Set the background color of date blocks to black */
+  color: rgb(0, 0, 0); /* Set the text color to white for better visibility */
+}
+
+.fc-day:hover {
+  background-color: rgba(30, 97, 163, 0.815); /* Change the background color on hover for better user experience */
+}
+
+/* Custom CSS to style events based on their classes */
+.fc-event.special-event {
+  background-color: red; /* Set background color for special events */
+  color: white; /* Set text color for better visibility */
+}
+
+.fc-event.normal-event {
+  background-color: blue; /* Set background color for normal events */
+  color: white; /* Set text color for better visibility */
+}
+
+
+.fc-toolbar-title {
+  padding-top:1rem;
+  padding-left:1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #06238a;
+}
+
+.fc-prev-button,
+.fc-next-button {
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Add border radius to the button */
+    padding: 5px 10px; /* Add padding to the button */
+    margin: 0 5px; /* Add margin to the button */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Hover effect for the buttons */
+.fc-prev-button:hover,
+.fc-next-button:hover {
+    background-color: #0056b3; /* Change background color on hover */
+} 

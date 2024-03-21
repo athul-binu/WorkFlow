@@ -1,5 +1,5 @@
 from django import forms
-from .models import Attendance
+from .models import Attendance,Leave
 
 class AttendanceForm(forms.ModelForm):
     class Meta:
@@ -14,3 +14,34 @@ class AttendanceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['EmployeeID'].required = False
         self.fields['Status'].required = False
+        
+        
+class LeaveForm(forms.ModelForm):
+    LEAVE_TYPE_CHOICES = (
+        ('sick_leave', 'Sick Leave'),
+        ('vacation_leave', 'Vacation Leave'),
+        ('maternity_leave', 'Maternity Leave'),
+        # Add more choices as needed
+    )
+
+    LeaveType = forms.ChoiceField(choices=LEAVE_TYPE_CHOICES)
+
+    class Meta:
+        model = Leave
+        fields = ['LeaveType', 'StartDate', 'EndDate', 'Duration', 'Status', 'Comments']
+        labels = {
+            'LeaveType': 'Leave Type',
+            'StartDate': 'Start Date',
+            'EndDate': 'End Date',
+            'Duration': 'Duration',
+            'Status': 'Status',
+            'Comments': 'Comments'
+        }
+
+        widgets = {
+            'StartDate': forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'Start Date'}),
+            'EndDate': forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'End Date'}),
+            'Duration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Duration in days'}),
+            'Status': forms.Select(attrs={'class': 'form-control'}),
+            'Comments': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Comments'}),
+        }
