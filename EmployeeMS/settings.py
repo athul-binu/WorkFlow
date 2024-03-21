@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Employeedb',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'mysql123',
         'HOST': 'localhost',
         'PORT': '',
         
