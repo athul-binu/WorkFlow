@@ -79,14 +79,14 @@ class Attendance(models.Model):
     AttendanceID = models.AutoField(primary_key=True)
     EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)
     Date = models.DateTimeField()
-    TotalHours = models.TimeField()
+    TotalHours = models.TimeField(null=True)
     Status = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'Attendance'
 
     def __str__(self):
-        return f"Attendance ID: {self.AttendanceID}, Employee: {self.EmployeeID}"
+        return f" Date: {self.Date}, Employee: {self.EmployeeID}"
 class Payroll(models.Model):
     PayrollID = models.AutoField(primary_key=True)
     EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)

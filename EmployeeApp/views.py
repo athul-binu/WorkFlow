@@ -5,9 +5,11 @@ from django.contrib import messages
 from django.db.models import Q
 # from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
-from EmployeeApp.models import Employee,Event,ScheduledEvent
+from EmployeeApp.models import Employee,Event,ScheduledEvent,Attendance
 from django.urls import reverse
 from django.forms import modelformset_factory
+from django.utils import timezone
+from .form import AttendanceForm
 
 def EmployeeDashboard(request):
     username = request.session.get('username')
@@ -61,3 +63,38 @@ def EmployeeProject(request):
     }
     
     return render(request, 'Employee/employee_project.html', context)
+
+
+
+def mark_attendance(request):
+    username = request.session.get('username')
+    
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    employee = Employee.objects.get(Username=username)
+    current_date = timezone.now().date()
+    
+    try:
+        attendance = Attendance.objects.get(EmployeeID=employee, Date=current_date)
+        status = attendance.Status
+        message = "Attendance for today is already marked."
+    except Attendance.DoesNotExist:
+        attendance = None
+        status = "Offline"
+
+    if request.method == 'POST':
+        if attendance:
+            messages.error(request, 'Attendance for today is already marked.')
+            return redirect('/mark_attendance')
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            attendance = form.save(commit=False)
+            attendance.EmployeeID = employee
+            attendance.Date = current_date
+            attendance.Status = "Active"
+            attendance.save()
+            return redirect('/mark_attendance')
+    else:
+        form = AttendanceForm(initial={'EmployeeID': employee.EmployeeID, 'Status': 'Active'})
+    return render(request, 'Employee/employee_attendance.html', {'form': form, 'employee_id': employee.EmployeeID, 'status': status,'employee': employee})
