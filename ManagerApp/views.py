@@ -5,10 +5,11 @@ from django.contrib import messages
 from django.db.models import Q
 from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
-from EmployeeApp.models import Employee
+from EmployeeApp.models import Employee,Leave
+from HrApp.models import HR
 from django.urls import reverse
 from django.forms import modelformset_factory
-
+from EmployeeApp.form import LeaveForm
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -24,8 +25,14 @@ def login_view(request):
             employee = Employee.objects.get(Username=username)
         except Employee.DoesNotExist:
             employee = None
+            
+        try:
+            hr = HR.objects.get(Username=username)
+        except HR.DoesNotExist:
+            hr = None
 
-        if not manager and not employee:
+
+        if not manager and not employee and not hr:
             messages.error(request, 'Username does not exist. Please try again.')
             return redirect("/")
 
@@ -56,13 +63,14 @@ def login_view(request):
                 return redirect('/EmployeeDashboard')  # Adjust the URL name as per your project
             else:
                 messages.error(request, 'Invalid username or password. Please try again.')
-        elif role == 'hr':
+        elif role == 'hr' and hr:
+            if password == hr.Password:
             # Assuming you have an 'hr_dashboard' named URL pattern
-            request.session['username'] = username
-            request.session['role'] = role
-            return redirect('hr_dashboard')  # Adjust the URL name as per your project
+                request.session['username'] = username
+                request.session['role'] = role
+                return redirect('/HrDashboard')  # Adjust the URL name as per your project
         else:
-            # Invalid role
+            messages.error(request, 'Invalid username or password. Please try again.')
             return HttpResponse("Invalid role")
     return render(request, 'login.html')
 
@@ -88,7 +96,8 @@ def ManagerDashboard(request):
     projects = Project.objects.filter(ManagerID=manager)
     employees = Employee.objects.all()
     employeesCount = employees.count()
-
+    leave=Leave.objects.all()
+    leaveCount = leave.count()
     project_count = projects.count()
     # Initialize empty lists to store task and team data
     task_data = []
@@ -97,9 +106,9 @@ def ManagerDashboard(request):
     # Iterate through each project to retrieve associated tasks and teams
     for project in projects:
         tasks = Task.objects.filter(ProjectID=project.ProjectID)
-        print(project.ProjectID)
-        print("below stask")
-        print(tasks)
+        # print(project.ProjectID)
+        # print("below stask")
+        # print(tasks)
         for task in tasks:
             # Retrieve teams associated with the current task
             teams = Team.objects.filter(TaskID=task.TaskID)
@@ -110,7 +119,7 @@ def ManagerDashboard(request):
             print(team_data)
         # Extend the task_data list with tasks
         task_data.extend(tasks)
-        print(task_data)
+        # print(task_data)
     
     # Prepare the context to pass to the template
     context = {
@@ -120,10 +129,10 @@ def ManagerDashboard(request):
         'team_data': team_data,
         'project_count': project_count,
         'employeesCount':employeesCount,
+        'leave':leaveCount
     }
-    print("Projects:", projects)
-    print("Task Data:", task_data)
-    print("Team Data:", team_data)
+    
+
 
     return render(request, "Manager/manager_dashboard.html", context)
 
@@ -470,10 +479,26 @@ def edit_project(request, project_id):
 
 
 
+def manager_leave(request):
+    leaves = Leave.objects.all()
+    form = LeaveForm()
+    context = {'Leave': leaves, 'form': form}
+    return render(request, 'Manager/manager_leavetable.html', context)
+    
+    # return render(request, 'Manager/manager_leavetable.html',context)
 
 
+def approve_leave(request, leave_id):
+    leave = Leave.objects.get(LeaveID=leave_id)
+    leave.Status = 'Approved'
+    leave.save()
+    return redirect('/leaverequest')   # Redirect to the same page to avoid form resubmission
 
-
+def reject_leave(request, leave_id):
+    leave = Leave.objects.get(LeaveID=leave_id)
+    leave.Status = 'Rejected'
+    leave.save()
+    return redirect('/leaverequest')
 # def CreateTask(request):
         
 #         team_form = TeamForm(request.POST)

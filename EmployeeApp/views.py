@@ -11,6 +11,7 @@ from django.forms import modelformset_factory
 from django.utils import timezone
 from .form import AttendanceForm,LeaveForm
 
+
 def EmployeeDashboard(request):
     username = request.session.get('username')
     
@@ -125,7 +126,14 @@ def leave(request):
     employee = Employee.objects.get(Username=username)
     if request.method == "POST":
         leave_form = LeaveForm(request.POST)
+        if leave_form.is_valid():
+            leave = leave_form.save(commit=False)
+            leave.EmployeeID = employee
+            leave_form.save()
+            return redirect('/EmployeeeDashboard')
     
     else:
         leave_form = LeaveForm()
     return render(request, 'Employee/employee_leave.html', {'employee': employee, 'leave_form':leave_form})
+
+
