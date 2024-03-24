@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    # path('accounts/', include('django.contrib.auth.urls'))
     path('project/<int:project_id>/', views.project_overview, name='project_overview'),
     path('ManagerDashboard/', views.ManagerDashboard, name='ManagerDashboard'),
     path('ManagerProject/', views.ManagerProject, name='ManagerProject'),

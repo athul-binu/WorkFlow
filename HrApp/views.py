@@ -3,13 +3,21 @@ from django.contrib import messages
 from .form import ApplicantForm,RecruitmentApplicationForm
 from .models import Applicant,RecruitmentApplication,JobApplication
 from django.db.models import Q
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 def CareerPage(request,application_id):
     Jobdetails = JobApplication.objects.get(ApplicationID=application_id)
     print(Jobdetails)
     if request.method == 'POST':
         form = ApplicantForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
+            applicant=form.save()
+            recruitment_application = Jobdetails.recruitmentapplication_set.create(
+                ApplicantID=applicant,
+                ApplicationDate=timezone.now(),
+                Status='None'
+            )
             messages.success(request, 'Your application has been submitted successfully!')
             return redirect("/home")
     else:
@@ -30,7 +38,6 @@ def home(request):
     }
     return render(request, 'index.html', context)
 
-
 def HrDashboard(request):
     applicants = Applicant.objects.all()
     applicant_count = applicants.count()
@@ -46,10 +53,13 @@ def HrDashboard(request):
     return render(request, 'Hr/hr_dashboard.html', context)
 
 def ApplicantList(request):
-    applicant_ids=RecruitmentApplication.objects.filter(~Q(Status='Approved') & ~Q(Status='Pending')).values_list('ApplicantID', flat=True)
-    applicants = Applicant.objects.filter(ApplicantID__in=applicant_ids)
+    # applicant_ids=RecruitmentApplication.objects.filter(~Q(Status='Approved') & ~Q(Status='Pending')).values_list('ApplicantID', flat=True)
+    # applicants = Applicant.objects.filter(ApplicantID__in=applicant_ids)
+    applicants = Applicant.objects.all()
+    Recruitment=RecruitmentApplication.objects.all()
     context = {
         'applicants': applicants,
+        'recruitment':Recruitment
     }
     return render(request, 'Hr/hr_applicant.html', context)
 

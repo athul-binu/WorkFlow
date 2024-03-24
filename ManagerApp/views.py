@@ -10,6 +10,10 @@ from HrApp.models import HR
 from django.urls import reverse
 from django.forms import modelformset_factory
 from EmployeeApp.form import LeaveForm
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth import logout
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -77,6 +81,7 @@ def login_view(request):
 
 def logout_view(request):
     # Clear session data
+    logout(request)
     request.session.clear()
     return redirect('login')
 
