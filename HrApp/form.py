@@ -1,5 +1,5 @@
 from django import forms
-from .models import Applicant,RecruitmentApplication,JobApplication
+from .models import Applicant,RecruitmentApplication,JobApplication,PerformanceReview
 class ApplicantForm(forms.ModelForm):
     PROFICIENCY_CHOICES = [
         ('Beginner', 'Beginner'),
@@ -40,6 +40,7 @@ class ApplicantForm(forms.ModelForm):
 class RecruitmentApplicationForm(forms.ModelForm):
     ApplicationDate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'}))
     ApplicationID = forms.ModelChoiceField(queryset=JobApplication.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+
     Status_CHOICES = [
         ('Pending', 'Pending'),
         ('Approved', 'Approved')
@@ -56,3 +57,17 @@ class RecruitmentApplicationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['ApplicationID'].queryset = JobApplication.objects.all()
         self.fields['ApplicationID'].empty_label = None
+
+
+
+# class PerformanceReviewForm(forms.ModelForm):
+#     class Meta:
+#         model = PerformanceReview
+#         fields = ['RecruitmentApplicationID', 'ReviewDate', 'ReviewerID', 'Rating', 'Comments']
+#         widgets = {
+#             'RecruitmentApplicationID': forms.Select(attrs={'class': 'form-control'}),
+#             'ReviewDate': forms.DateTimeInput(attrs={'class': 'form-control'}),
+#             'ReviewerID': forms.Select(attrs={'class': 'form-control'}),
+#             'Rating': forms.NumberInput(attrs={'class': 'form-control'}),
+#             'Comments': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+#         }

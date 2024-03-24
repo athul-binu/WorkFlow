@@ -107,6 +107,7 @@
                             <th scope="col">Phone Number</th>
                             <th scope="col">Resume</th>
                             <th scope="col">Proficiency Level</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -120,11 +121,26 @@
                             <td><a href="{{ applicant.Resume.url }}">{{ applicant.Resume.name }}</a></td>
                             <td>{{ applicant.ProficiencyLevel }}</td>
                             <td>
+                                {% for recruitment in recruitment %}
+                                    {% if recruitment.ApplicantID_id == applicant.ApplicantID %}
+                                        {{ recruitment.Status }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
                                 <div class="d-flex">
-                                    <form action="{% url 'create_recruitment_application' applicant.ApplicantID %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" name="approve" class="btn btn-success me-2">Approve</button>
-                                    </form>
+                                    {% for recruitment in recruitment %}
+                                    {% if recruitment.ApplicantID_id == applicant.ApplicantID %}
+                                        {% if recruitment.Status == 'Approved' or recruitment.Status == "" %}
+                                            <button type="submit" name="approve" class="btn btn-success me-2" disabled>Approve</button>
+                                        {% else %}
+                                            <form action="{% url 'create_recruitment_application' applicant.ApplicantID %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" name="approve" class="btn btn-success me-2">Approve</button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                                     <form action="{% url 'update_status' applicant.ApplicantID %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" name="reject" class="btn btn-danger">Reject</button>
