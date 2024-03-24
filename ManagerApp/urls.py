@@ -16,6 +16,10 @@ urlpatterns = [
     path('ManagerProjectTeam/', views.CreateTeam, name='ManagerProjectTeam'),
     path('ManagerProjectEdit/<int:project_id>', views.edit_project, name='ManagerProjectEdit'),
     path('edit_project/<int:project_id>/', views.edit_project, name='edit_project'),
-
-
+    path('leaverequest/', views.manager_leave, name='leaverequest'),
+    path('approve_leave/<int:leave_id>/', views.approve_leave, name='approve_leave'),
+    path('reject_leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
 ]
+
+
+
