@@ -14,8 +14,11 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="{% static 'css/manager_dashboard.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-QVvLDa2WCZP7dyk+uUnbEFHFLr2pwBgOWvlNh1YxKie3m1BcB2jXfzZIZyJABCGtzLNcF+B8deX13lyVTrT8vg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-QVvLDa2WCZP7dyk+uUnbEFHFLr2pwBgOWvlNh1YxKie3m1BcB2jXfzZIZyJABCGtzLNcF+B8deX13lyVTrT8vg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
 </head>
 
@@ -74,11 +77,11 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="" class="sidebar-link">
+                    <a href="/job" class="sidebar-link">
                         <span class="material-icons">
                             assessment
                         </span>
-                        <span>Reports</span>
+                        <span>HR Reports</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -94,205 +97,144 @@
 
         <div class="main p-3">
             <h1>Manager Dashboard</h1>
-                
+
             <div class="row mt-4 ">
                 <div class="col mb-3">
-                    <div class="card  card-hover" style="background-image: url('{% static 'img/20.png' %}');
-                    background-position: center; background-size:400px;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon2.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Active Employees</p>
-                        <span class="large-font ms-3">{{employeesCount}}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/PrismGradient.png' %}');
-                    background-position: center;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon1.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Ongoing Projects</p>
-                        <span class="large-font ms-3">{{project_count}}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/14.png' %}');
-                    background-position:  center;   background-size: 400px;">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon3.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">Leave Request</p>
-                        <span class="large-font ms-3">8</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col mb-3">
-                    <div class="card card-hover" style="background-image: url('{% static 'img/32.png' %}');
-                    background-position: center;background-size: 400px; ">
-                      <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon4.png' %}" alt="">
-                      <div>
-                          <p class="widgettxt mt-2 ms-2">HR Response</p>
-                        <span class="large-font ms-3">0</span>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-            
-                <article class="table-widget">
-                    <div class="caption">
-                        <h2>Project Overview</h2>
-                        <button class="export-btn" type="button">Export</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Project Name</th>
-                                <th>Status</th>
-                                <th>Task</th>
-                                <th>Due Date</th>
-                                <th>Team Name</th>
-                                <th>Project Lead</th>
-                                <th>Priority</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="project-rows">
-                            {% for project in projects %}
-                            <tr>
-                                <td class="tabletxt">{{ project.ProjectName }} </td>
-                                <!-- Loop through task_data and team_data to display related tasks and teams -->
-                                {% for task in task_data %}
-                                {% for team in team_data %}
-                                {% if task.ProjectID_id == project.ProjectID %}
-                                {% if team.TaskID_id == task.TaskID %}
-                                <td>
-                                    <div class="status">
-                                        <div class="status__circle status--active"></div>{{ project.Status }}
-                                    </div>
-                                </td>
-                                <td>
-                                    {% for task in project.task_set.all %}
-                                    
-                                
-                                    <div class="tags">
-                                        <div class="tag tag--dev mb-2">
-                                            {{ task.Title }}
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </td>
-                                <td>{{ project.DueDate }}</td>
-                                <td>{{ team.TeamName }}</td>
-                                <td>{{ project.ProjectLead }}</td>
-                                <td>{{ project.Priority }}</td>
-
-                                {% endif %}
-                                {% endif %}
-                                {% endfor %}
-
-
-
-
-                                {% comment %} {% for team in team_data %}
-                                {% if team.TaskID_id == task.TaskID %}
-                                <td>{{ team.TeamName }}</td> {% endcomment %}
-                                {% comment %} {% endif %} {% endcomment %}
-
-                                {% endfor %}
-                                <!-- Add action buttons -->
-                                <td>
-                                    <div class="tags action-cell">
-                                        <a href="{% url 'project_overview' project.ProjectID %}" class="">
-                                            <span class="material-symbols-outlined me-2">
-                                                visibility
-                                                </span> <!-- Font Awesome icon for View -->
-                                        </a>
-                                     
-                                        <a href="{% url 'ManagerProjectEdit' project.ProjectID %}?next={{ request.path }}">
-                                        <a href="{% url 'edit_project' project.ProjectID %}?next={{ request.path }}">
-                                            <span class="material-symbols-outlined">
-                                                edit_square
-                                                </span> <!-- Font Awesome icon for Edit -->
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
-                </article>
-    </div>
-</div>
-</div>
-</div>
-<!-- Manager Overview Section -->
-            {% comment %} <div class="row">
-                <div class="col">
-                    <div class="manager-section">
-                        <h3 class="textWid">Manager Details</h3>
-                        <div class="container">
-                            <p class="manager-label">Manager ID:</p>
-                            <p class="manager-value">M123</p>
-                            <p class="manager-label">Name:</p>
-                            <p class="manager-value">Manager Name</p>
-                            <!-- Add more manager details as needed -->
+                    <div class="card card-hover" style="background-image: url('{% static 'img/20.png' %}'); background-position: center; background-size: 400px;">
+                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon2.png' %}" alt="">
+                        <div>
+                            <p class="widgettxt mt-2 ms-2">Active Employees</p>
+                            <span class="large-font ms-3">{{employeesCount}}</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="col">
-                    <div class="manager-section">
-                        <h3 class="textWid">Team Overview</h3>
-                        <div class="container">
-                            <p class="manager-label">Total Team Members:</p>
-                            <p class="manager-value">5</p>
-                            <p class="manager-label">Projects in Progress:</p>
-                            <p class="manager-value">3</p>
-                            <!-- Add more team overview details as needed -->
+                
+                <div class="col mb-3">
+                    <a href="/ManagerProject" class="card card-hover" style="background-image: url('{% static 'img/PrismGradient.png' %}');
+                    background-position: center;">
+                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon1.png' %}" alt="">
+                        <div>
+                            <p class="widgettxt mt-2 ms-2">Ongoing Projects</p>
+                            <span class="large-font ms-3">{{project_count}}</span>
                         </div>
-                    </div>
-                </div> {% endcomment %}
-                <!-- Manager Team Members Section -->
-                <!-- <div class="manager-section mt-4">
-                <h3>Team Members</h3>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="name-column">Name</th>
-                                <th scope="col">Role</th>
-                                <th scope="col">Project</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row">
-                                    <div class="profile-card">
-                                        <img src="profile pics\Ellipse 1.png" alt="Avatar" class="avatar">
-                                        <div class="profile-info">
-                                            <p class="name">Team Member 1</p>
-                                            <p class="email">team1@example.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Developer</td>
-                                <td>Project A</td>
-                                <td>
-                                    <button class="status-button">
-                                        <span class="btn-font">In Progress</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Add more team members as needed -->
-   
+                    </a>
+                </div>
+                <div class="col mb-3">
+                    <a  href="/leaverequest" class="card card-hover" style="background-image: url('{% static 'img/14.png' %}');
+                    background-position:  center;   background-size: 400px;">
+                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon3.png' %}" alt="">
+                        <div>
+                            <p class="widgettxt mt-2 ms-2">Leave Request</p>
+                            <span class="large-font ms-3">{{leave}}</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col mb-3">
+                    <a  href="/RecruitRequest" class="card card-hover" style="background-image: url('{% static 'img/32.png' %}');
+                    background-position: center;background-size: 400px; ">
+                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon4.png' %}" alt="">
+                        <div>
+                            <p class="widgettxt mt-2 ms-2">HR Request</p>
+                            <span class="widgettxt ms-2">Recruit Request</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
-            src = "script.js"
-        </script>
+            <article class="table-widget">
+                <div class="caption">
+                    <h2>Project Overview</h2>
+                    <button class="export-btn" type="button">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Status</th>
+                            <th>Task</th>
+                            <th>Due Date</th>
+                            <th>Team Name</th>
+                            <th>Project Lead</th>
+                            <th>Priority</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="project-rows">
+                        {% for project in projects %}
+                        <tr>
+                            <td class="tabletxt">{{ project.ProjectName }} </td>
+                            <!-- Loop through task_data and team_data to display related tasks and teams -->
+                            {% for task in task_data %}
+                            {% for team in team_data %}
+                            {% if task.ProjectID_id == project.ProjectID %}
+                            {% if team.TaskID_id == task.TaskID %}
+                            <td>
+                                <div class="status">
+                                    <div class="status__circle status--active"></div>{{ project.Status }}
+                                </div>
+                            </td>
+                            <td>
+                                {% for task in project.task_set.all %}
+
+
+                                <div class="tags">
+                                    <div class="tag tag--dev mb-2">
+                                        {{ task.Title }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </td>
+                            <td>{{ project.DueDate }}</td>
+                            <td>{{ team.TeamName }}</td>
+                            <td>{{ project.ProjectLead }}</td>
+                            <td>{{ project.Priority }}</td>
+
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+
+
+
+
+                            {% comment %} {% for team in team_data %}
+                            {% if team.TaskID_id == task.TaskID %}
+                            <td>{{ team.TeamName }}</td> {% endcomment %}
+                            {% comment %} {% endif %} {% endcomment %}
+
+                            {% endfor %}
+                            <!-- Add action buttons -->
+                            <td>
+                                <div class="tags action-cell">
+                                    <a href="{% url 'project_overview' project.ProjectID %}" class="">
+                                        <span class="material-symbols-outlined me-2">
+                                            visibility
+                                        </span> <!-- Font Awesome icon for View -->
+                                    </a>
+
+                                    <a href="{% url 'ManagerProjectEdit' project.ProjectID %}?next={{ request.path }}">
+                                        <a href="{% url 'edit_project' project.ProjectID %}?next={{ request.path }}">
+                                            <span class="material-symbols-outlined">
+                                                edit_square
+                                            </span> <!-- Font Awesome icon for Edit -->
+                                        </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </article>
+        </div>
+        
+
+    </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+                src = "script.js"
+            </script>
 </body>
 
 </html>

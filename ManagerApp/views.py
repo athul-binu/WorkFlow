@@ -3,11 +3,16 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Q
-from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
+from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm,RecruitmentRequestForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
-from EmployeeApp.models import Employee
+from EmployeeApp.models import Employee,Leave
 from django.urls import reverse
 from django.forms import modelformset_factory
+from EmployeeApp.form import LeaveForm
+from django.contrib.auth.decorators import login_required
+from HrApp.models import JobApplication,HR,RecruitmentApplication
+
+from django.contrib.auth import logout
 
 def login_view(request):
     if request.method == 'POST':
@@ -24,8 +29,14 @@ def login_view(request):
             employee = Employee.objects.get(Username=username)
         except Employee.DoesNotExist:
             employee = None
+            
+        try:
+            hr = HR.objects.get(Username=username)
+        except HR.DoesNotExist:
+            hr = None
 
-        if not manager and not employee:
+
+        if not manager and not employee and not hr:
             messages.error(request, 'Username does not exist. Please try again.')
             return redirect("/")
 
@@ -56,19 +67,21 @@ def login_view(request):
                 return redirect('/EmployeeDashboard')  # Adjust the URL name as per your project
             else:
                 messages.error(request, 'Invalid username or password. Please try again.')
-        elif role == 'hr':
+        elif role == 'hr' and hr:
+            if password == hr.Password:
             # Assuming you have an 'hr_dashboard' named URL pattern
-            request.session['username'] = username
-            request.session['role'] = role
-            return redirect('hr_dashboard')  # Adjust the URL name as per your project
+                request.session['username'] = username
+                request.session['role'] = role
+                return redirect('/HrDashboard')  # Adjust the URL name as per your project
         else:
-            # Invalid role
+            messages.error(request, 'Invalid username or password. Please try again.')
             return HttpResponse("Invalid role")
     return render(request, 'login.html')
 
 
 def logout_view(request):
     # Clear session data
+    logout(request)
     request.session.clear()
     return redirect('login')
 
@@ -88,7 +101,8 @@ def ManagerDashboard(request):
     projects = Project.objects.filter(ManagerID=manager)
     employees = Employee.objects.all()
     employeesCount = employees.count()
-
+    leave=Leave.objects.all()
+    leaveCount = leave.count()
     project_count = projects.count()
     # Initialize empty lists to store task and team data
     task_data = []
@@ -97,9 +111,9 @@ def ManagerDashboard(request):
     # Iterate through each project to retrieve associated tasks and teams
     for project in projects:
         tasks = Task.objects.filter(ProjectID=project.ProjectID)
-        print(project.ProjectID)
-        print("below stask")
-        print(tasks)
+        # print(project.ProjectID)
+        # print("below stask")
+        # print(tasks)
         for task in tasks:
             # Retrieve teams associated with the current task
             teams = Team.objects.filter(TaskID=task.TaskID)
@@ -110,7 +124,7 @@ def ManagerDashboard(request):
             print(team_data)
         # Extend the task_data list with tasks
         task_data.extend(tasks)
-        print(task_data)
+        # print(task_data)
     
     # Prepare the context to pass to the template
     context = {
@@ -120,10 +134,10 @@ def ManagerDashboard(request):
         'team_data': team_data,
         'project_count': project_count,
         'employeesCount':employeesCount,
+        'leave':leaveCount
     }
-    print("Projects:", projects)
-    print("Task Data:", task_data)
-    print("Team Data:", team_data)
+    
+
 
     return render(request, "Manager/manager_dashboard.html", context)
 
@@ -392,7 +406,8 @@ def CreateTeam(request):
         'task': taskdata
     }
 
-    return render(request, 'Manager/manager_teamadd.html',content)
+    return render(
+        request, 'Manager/manager_teamadd.html',content)
 
 
 
@@ -469,6 +484,88 @@ def edit_project(request, project_id):
     })
 
 
+
+def manager_leave(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    leaves = Leave.objects.all()
+    form = LeaveForm()
+    context = {'Leave': leaves, 'form': form, 'manager': manager,}
+    return render(request, 'Manager/manager_leavetable.html', context)
+    
+    # return render(request, 'Manager/manager_leavetable.html',context)
+
+
+def approve_leave(request, leave_id):
+    leave = Leave.objects.get(LeaveID=leave_id)
+    leave.Status = 'Approved'
+    leave.save()
+    return redirect('/leaverequest')   # Redirect to the same page to avoid form resubmission
+
+def reject_leave(request, leave_id):
+    leave = Leave.objects.get(LeaveID=leave_id)
+    leave.Status = 'Rejected'
+    leave.save()
+    return redirect('/leaverequest')
+
+
+def RecruitRequest(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    
+    if request.method == 'POST':
+        form = RecruitmentRequestForm(request.POST)
+        if form.is_valid():
+            recruitment_request = form.save(commit=False)
+            recruitment_request.ManagerID = manager
+            recruitment_request.save()
+            form.save_m2m()
+            return redirect('/ManagerDashboard')  # Redirect to a success page
+    else:
+        form = RecruitmentRequestForm()
+        
+    context = {
+        'form': form,
+        'manager': manager,
+        
+    }
+    return render(request, 'Manager/recruit_request.html', context)
+
+
+
+
+
+def job_application_view(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    # Fetch all JobApplication instances
+    job_applications = JobApplication.objects.all()
+    for job_application in job_applications:
+        recruitment_applications = RecruitmentApplication.objects.filter(ApplicationID=job_application)
+        applicants = [recruitment_application.ApplicantID for recruitment_application in recruitment_applications]
+        job_application.applicants = applicants
+    return render(request, 'Manager/jobsection.html',  {'job_applications': job_applications, 'manager': manager,})
 
 
 

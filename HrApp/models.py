@@ -66,6 +66,19 @@ class RecruitmentApplication(models.Model):
         return f"Application ID: {self.ApplicationID}, Applicant ID: {self.ApplicantID}"
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class PerformanceReview(models.Model):
     ReviewID = models.AutoField(primary_key=True)
     RecruitmentApplicationID = models.ForeignKey(RecruitmentApplication, on_delete=models.CASCADE)

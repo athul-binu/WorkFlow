@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Employeedb',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'mysql123',
         'HOST': 'localhost',
         'PORT': '',
         
@@ -129,6 +129,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL ='/logout'
+# LOOUT_URL ='/logout'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
