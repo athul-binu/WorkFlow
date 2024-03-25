@@ -3,14 +3,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Q
-from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm
+from .forms import ProjectForm, TaskForm, TeamForm, TeamMembersForm,RecruitmentRequestForm
 from ManagerApp.models import Manager, Project, Task, Team, TeamMembers
 from EmployeeApp.models import Employee,Leave
-from HrApp.models import HR
 from django.urls import reverse
 from django.forms import modelformset_factory
 from EmployeeApp.form import LeaveForm
 from django.contrib.auth.decorators import login_required
+from HrApp.models import JobApplication,HR,RecruitmentApplication
 
 from django.contrib.auth import logout
 
@@ -406,7 +406,8 @@ def CreateTeam(request):
         'task': taskdata
     }
 
-    return render(request, 'Manager/manager_teamadd.html',content)
+    return render(
+        request, 'Manager/manager_teamadd.html',content)
 
 
 
@@ -485,9 +486,18 @@ def edit_project(request, project_id):
 
 
 def manager_leave(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
     leaves = Leave.objects.all()
     form = LeaveForm()
-    context = {'Leave': leaves, 'form': form}
+    context = {'Leave': leaves, 'form': form, 'manager': manager,}
     return render(request, 'Manager/manager_leavetable.html', context)
     
     # return render(request, 'Manager/manager_leavetable.html',context)
@@ -504,6 +514,63 @@ def reject_leave(request, leave_id):
     leave.Status = 'Rejected'
     leave.save()
     return redirect('/leaverequest')
+
+
+def RecruitRequest(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    
+    if request.method == 'POST':
+        form = RecruitmentRequestForm(request.POST)
+        if form.is_valid():
+            recruitment_request = form.save(commit=False)
+            recruitment_request.ManagerID = manager
+            recruitment_request.save()
+            form.save_m2m()
+            return redirect('/ManagerDashboard')  # Redirect to a success page
+    else:
+        form = RecruitmentRequestForm()
+        
+    context = {
+        'form': form,
+        'manager': manager,
+        
+    }
+    return render(request, 'Manager/recruit_request.html', context)
+
+
+
+
+
+def job_application_view(request):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+    
+    # Query the manager based on the username
+    try:
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+    # Fetch all JobApplication instances
+    job_applications = JobApplication.objects.all()
+    for job_application in job_applications:
+        recruitment_applications = RecruitmentApplication.objects.filter(ApplicationID=job_application)
+        applicants = [recruitment_application.ApplicantID for recruitment_application in recruitment_applications]
+        job_application.applicants = applicants
+    return render(request, 'Manager/jobsection.html',  {'job_applications': job_applications, 'manager': manager,})
+
+
+
+
+
 # def CreateTask(request):
         
 #         team_form = TeamForm(request.POST)

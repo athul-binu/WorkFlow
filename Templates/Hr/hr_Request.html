@@ -27,6 +27,7 @@
       width: 100%;
       background-size: cover;">
     <div class="wrapper">
+
         <aside id="sidebar">
             <div class="container-fluid mx-auto">
                 <p class="fontoflogo ms-4">Workflow</p>
@@ -43,7 +44,7 @@
             </div>
             <ul class="sidebar-nav nav-pills">
                 <li class="sidebar-item nav-pills">
-                    <a href="/HrDashboard" class="sidebar-link nav-link active">
+                    <a href="/HrDashboard" class="sidebar-link">
                         <span class="material-icons md-28 ">
                             dashboard
                         </span>
@@ -52,7 +53,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="/applicantnoti" class="sidebar-link">
+                    <a href="/applicantnoti" class="sidebar-link nav-link active">
                         <span class="material-icons">
                             people
                         </span>
@@ -60,7 +61,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/recruitmentRequest" class="sidebar-link">
+                    <a href="" class="sidebar-link">
                         <span class="material-icons">
                             assessment
                         </span>
@@ -79,34 +80,26 @@
         </aside>
 
         <div class="main p-3">
-            <h1>HR Dashboard</h1>
-            <div class="container">
-            <div class="row ">
-                <div class="col mb-3 col-3">
-                    <a href="/applicantnoti" class="card card-hover" style="background-image: url('{% static 'img/20.png' %}'); background-position: center; background-size: 400px;">
-                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon2.png' %}" alt="">
-                        <div>
-                            <p class="widgettxt mt-2 ms-2">Applicant Notification</p>
-                            <span class="large-font ms-3">{{applicant_count}}</span>
-                        </div>
-                    </a>
+            <h1>Manager Recruitment Request</h1>
+            {% for recruitment_request in recruitment_request  %}
+            <div class="card text-bg-dark mt-3 mb-3" style="width: 20rem; height:20rem;">
+                <div class="card-body">
+                    <h2 class="card-title">{{ recruitment_request.JobTitle }}</h2>
+                    <h5 class="card-title">Manager Name: {{ recruitment_request.ManagerID.FirstName }}</h5>
+                    <p class="card-text">Job Description: {{ recruitment_request.TaskDescription }}</p>
+                    <p class="card-text">Recruitment Type: {{ recruitment_request.RecruitmentType }}</p>
+                    <p class="card-text">Close Date: {{ recruitment_request.CloseDate }}</p>
+                    <p class="card-text">Experience: {{ recruitment_request.Experience }}</p>
+                    <p class="card-text">Status: {{ recruitment_request.Status }}</p>
+                    <a href="{% url 'create_job_application' recruitment_request.RequestID %}" class="btn btn-primary">Create Job Application</a>
                 </div>
-                <div class="col mb-3">
-                    <a href="/recruitmentRequest" class="card card-hover" style="background-image: url('{% static 'img/92.png' %}'); background-position: center; background-size: 400px;">
-                        <img class="widgetimg ms-3 mt-2" src="{% static 'img/icons/icon2.png' %}" alt="">
-                        <div>
-                            <p class="widgettxt mt-2 ms-2">Applicant Notification</p>
-                            <span class="large-font ms-3">{{recruit_count}}</span>
-                        </div>
-                    </a>
-                </div>
-        </div>
-        </div>
-        
+                {% endfor %}
+            </div>
+            </div>
  
         
 </div>
-</div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
                 src = "script.js"
