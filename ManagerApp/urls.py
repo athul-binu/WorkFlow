@@ -20,6 +20,8 @@ urlpatterns = [
     path('leaverequest/', views.manager_leave, name='leaverequest'),
     path('approve_leave/<int:leave_id>/', views.approve_leave, name='approve_leave'),
     path('reject_leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
+    path('RecruitRequest/', views.RecruitRequest, name='RecruitRequest'),
+    path('job/', views.job_application_view, name='job'),
 ]
 
 

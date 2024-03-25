@@ -34,54 +34,38 @@
             </div>
             <div class="container-sm user-card">
                 <a href="user_profile.html">
-                    <img src="{{manager.image.url}}" alt="User Image" class="user-image">
+                    <img src="{{hr.image.url}}" alt="User Image" class="user-image">
                 </a>
 
                 <div class="user-info d-sm-none d-md-block d-none d-sm-block d-md-none d-lg-block">
-                    <h3 class="user-name">{{manager.FirstName}} {{manager.LastName}}</h3>
-                    <p class="user-role">Manager</p>
+                    <h3 class="user-name">{{hr.FirstName}} {{hr.LastName}}</h3>
+                    <p class="user-role">HR</p>
                 </div>
             </div>
             <ul class="sidebar-nav nav-pills">
                 <li class="sidebar-item nav-pills">
-                    <a href="manager_dashboard.html" class="sidebar-link nav-link active">
+                    <a href="/HrDashboard" class="sidebar-link ">
                         <span class="material-icons md-28 ">
                             dashboard
                         </span>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a href="/ManagerProject" class="sidebar-link">
-                        <span class="material-symbols-outlined md-48">
-                            badge
-                        </span>
-                        <span>Projects</span>
-                    </a>
-                </li>
 
                 <li class="sidebar-item">
-                    <a href="/ManagerTeam" class="sidebar-link">
+                    <a href="/applicantnoti" class="sidebar-link nav-link active">
                         <span class="material-icons">
                             people
                         </span>
-                        <span>Team</span>
+                        <span>Recruitment</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/ManagerTask" class="sidebar-link">
-                        <span class="material-icons">
-                            list
-                        </span>
-                        <span>Tasks</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="" class="sidebar-link">
+                    <a href="/recruitmentRequest" class="sidebar-link">
                         <span class="material-icons">
                             assessment
                         </span>
-                        <span>Reports</span>
+                        <span>Request</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

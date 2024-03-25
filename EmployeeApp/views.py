@@ -130,7 +130,7 @@ def leave(request):
             leave = leave_form.save(commit=False)
             leave.EmployeeID = employee
             leave_form.save()
-            return redirect('/EmployeeeDashboard')
+            return redirect('/leave')
     
     else:
         leave_form = LeaveForm()

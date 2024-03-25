@@ -59,6 +59,27 @@ class RecruitmentApplicationForm(forms.ModelForm):
         self.fields['ApplicationID'].empty_label = None
 
 
+class JobApplicationForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['JobDescription', 'OpenDate', 'CloseDate', 'Status']
+        widgets = {
+            'JobDescription': forms.TextInput(attrs={'class': 'form-control'}),
+            'OpenDate': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'CloseDate': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'Status': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 # class PerformanceReviewForm(forms.ModelForm):
 #     class Meta:
