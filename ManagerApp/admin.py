@@ -27,7 +27,7 @@ admin.site.register(HR)
 admin.site.register(Applicant)
 admin.site.register(JobApplication)
 admin.site.register(RecruitmentApplication)
-admin.site.register(PerformanceReview)
+
 
 # Register AdminApp models
 admin.site.register(Admin)

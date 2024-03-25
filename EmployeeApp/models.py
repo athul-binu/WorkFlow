@@ -65,7 +65,7 @@ class Leave(models.Model):
     StartDate = models.DateTimeField()
     EndDate = models.DateTimeField()
     Duration = models.DecimalField(max_digits=5, decimal_places=2)
-    Status = models.CharField(max_length=100)
+    Status = models.CharField(max_length=100,null=True,blank=True)
     Comments = models.TextField()
 
     class Meta:
@@ -79,14 +79,14 @@ class Attendance(models.Model):
     AttendanceID = models.AutoField(primary_key=True)
     EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)
     Date = models.DateTimeField()
-    TotalHours = models.TimeField()
-    Status = models.CharField(max_length=100)
+    TotalHours = models.TimeField(null=True)
+    Status = models.CharField(max_length=100,null=True, blank=True)
 
     class Meta:
         db_table = 'Attendance'
 
     def __str__(self):
-        return f"Attendance ID: {self.AttendanceID}, Employee: {self.EmployeeID}"
+        return f" Date: {self.Date}, Employee: {self.EmployeeID}"
 class Payroll(models.Model):
     PayrollID = models.AutoField(primary_key=True)
     EmployeeID = models.ForeignKey(Employee, on_delete=models.CASCADE)

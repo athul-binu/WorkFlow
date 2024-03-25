@@ -1,10 +1,10 @@
 from django import forms
-from ManagerApp.models import Project, Task, Team, TeamMembers
+from ManagerApp.models import Project, Task, Team, TeamMembers,RecruitmentRequest
 from EmployeeApp.models import Skill,Employee
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.forms import HiddenInput
-
+from HrApp.models import HR
 class ProjectForm(forms.ModelForm):
     StartDate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     DueDate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
@@ -54,3 +54,23 @@ class TeamMembersForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Submit'))
+        
+        
+        
+
+
+class RecruitmentRequestForm(forms.ModelForm):
+    SkillID = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(), widget=forms.CheckboxSelectMultiple)
+    HRID = forms.ModelChoiceField(queryset=HR.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    class Meta:
+        model = RecruitmentRequest
+        fields = ['HRID','JobTitle', 'TaskDescription', 'CloseDate', 'Status', 'RecruitmentType', 'Experience', 'SkillID']
+        widgets = {
+            'CloseDate': forms.DateInput(attrs={'type': 'date','class': 'form-control'}), 
+            'JobTitle': forms.TextInput(attrs={'type': 'text','class': 'form-control'}),
+            'TaskDescription': forms.TextInput(attrs={'type': 'text','class': 'form-control'}),
+            'Status': forms.TextInput(attrs={'class': 'form-control'}),
+            'RecruitmentType': forms.TextInput(attrs={'class': 'form-control'}),
+            'Experience': forms.TextInput(attrs={'class': 'form-control'}),
+            'HRID': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
