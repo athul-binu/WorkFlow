@@ -92,13 +92,18 @@
         <div class="main p-3">
             <h1>Project Overview</h1>   
             
-                <div class="addp  mt-2 ms-2">
-                    <button class=" tag tag--dev me-3">
-                        <a href="/ManagerProjectAdd">Add Project</a>
+            <div class="addp  mt-2 ms-2">
+                <button class=" tag tag--dev me-3">
+                    <a href="/ManagerProjectAdd">Add Project</a>
 
-                    </button>
-                </div>
-                    <div class="datatravel">
+                </button>
+            </div>
+            <div class="addp  mt-2 ms-2">
+                <button class=" tag tag--dev me-3">
+                    <a href="/ManagerProjectAdd">Add Project</a>
+                </button>
+            </div>
+            <div class="datatravel">
                     <form method="POST" class="d-flex tags">
                         {% csrf_token %}
                         <input class="form-control me-2 transparent-input" type="search" placeholder="Search" aria-label="Search" id="search-input" name="search">

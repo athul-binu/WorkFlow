@@ -86,41 +86,43 @@
             <h1>Project Edit</h1>
             <!-- Include form tags and fields here -->
             <div class="row">
-                <form method="POST">
-                    {% csrf_token %}
-                    {% crispy project_form %}
+                
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% crispy project_form %}
                     
-                    <!-- Task Formset -->
-                    {{ task_formset.management_form }}
-                    <h2>Task Form</h2>
-                    {% for form in task_formset %}
-                    <div class="formset-item">
-                        {% crispy form %}
-                    </div>
-                    {% endfor %}
-                
-                    <!-- Team Formset -->
-                    {{ team_formset.management_form }}
-                    <h2>Team Form</h2>
-                    {% for form in team_formsets %}
-                    <div class="formset-item">
-                        {% crispy form %}
-                    </div>
-                    {% endfor %}
-                
-                    <!-- Team Members Formset -->
-                    {% for formset in team_members_formsets %}
-                    <h2>Team Members Form</h2>
-                    {{ formset.management_form }}
-                    {% for form in formset %}
-                    <div class="formset-item">
-                        {% crispy form %}
-                    </div>
-                    {% endfor %}
-                    {% endfor %}
-                
-                    <button type="submit">Save Changes</button>
-                </form>
+                        <!-- Task Formset -->
+                        {% comment %} {{ task_formset.management_form }}
+                        <h2>Task Form</h2>
+                        {% for form in task_formset %}
+                        <div class="formset-item">
+                            {% crispy form %}
+                        </div>
+                        {% endfor %}
+                    
+                        <!-- Team Formset -->
+                        {{ team_formset.management_form }}
+                        <h2>Team Form</h2>
+                        {% for form in team_formsets %}
+                        <div class="formset-item">
+                            {% crispy form %}
+                        </div>
+                        {% endfor %}
+                    
+                        <!-- Team Members Formset -->
+                        {% for formset in team_members_formsets %}
+                        <h2>Team Members Form</h2>
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                        <div class="formset-item">
+                            {% crispy form %}
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                    
+                        <button type="submit">Save Changes</button> {% endcomment %}
+                    </form>
+                    
                 
             </div>
         </div>
