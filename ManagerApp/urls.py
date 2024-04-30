@@ -22,6 +22,8 @@ urlpatterns = [
     path('reject_leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
     path('RecruitRequest/', views.RecruitRequest, name='RecruitRequest'),
     path('job/', views.job_application_view, name='job'),
+    path('addtask/<int:task_id>', views.edit_task, name='addtask'),
+    
 ]
 
 
