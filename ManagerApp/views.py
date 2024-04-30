@@ -376,39 +376,38 @@ def CreateTeam(request):
     if not username:
         return HttpResponse("Session expired or not logged in.")
     
-    # Query the manager based on the username
     try:
         manager = Manager.objects.get(Username=username)
     except Manager.DoesNotExist:
         return HttpResponse("Manager does not exist.")
-    taskdata=[]
+    
     project=Project.objects.filter(ManagerID=manager)
     employee=Employee.objects.all()
-    for project in project:
-        task = Task.objects.filter(ProjectID=project)
-        taskdata.extend(task)
+    
     if request.method == 'POST':
-        
         team_form = TeamForm(request.POST)
-
         if team_form.is_valid():
-            team = team_form.save(commit=False)
-            team.save()
-
-            return redirect('/ManagerProject')
+            task_id = team_form.cleaned_data['TaskID']
+            # Check if a team already exists for the selected task
+            existing_team = Team.objects.filter(TaskID=task_id).exists()
+            if existing_team:
+                # Handle the case where a team already exists for the task
+                messages.error(request, 'A team already exists for the selected task.')
+            else:
+                team = team_form.save(commit=False)
+                team.save()
+                return redirect('/ManagerProject')
     else:
         team_form = TeamForm()
-    content={
-        'manager':manager,
+
+    context = {
+        'manager': manager,
         'team_form': team_form,
         'project': project,
         'employee': employee,
-        'task': taskdata
     }
 
-    return render(
-        request, 'Manager/manager_teamadd.html',content)
-
+    return render(request, 'Manager/manager_teamadd.html', context)
 
 
 
@@ -484,6 +483,31 @@ def edit_project(request, project_id):
     })
 
 
+def edit_task(request, task_id):
+    username = request.session.get('username')
+    if not username:
+        return HttpResponse("Session expired or not logged in.")
+
+    try:
+        # Assuming you have a way to retrieve the manager instance
+        manager = Manager.objects.get(Username=username)
+    except Manager.DoesNotExist:
+        return HttpResponse("Manager does not exist.")
+
+    task = get_object_or_404(Task, pk=task_id)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('/ManagerDashboard')  # Redirect to dashboard or other appropriate page
+    else:
+        form = TaskForm(instance=task)
+
+    return render(request, 'Manager/Manager_taskadd.html', {
+        'task_form': form,
+        'manager': manager
+    })
 
 def manager_leave(request):
     username = request.session.get('username')
