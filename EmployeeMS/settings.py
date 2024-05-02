@@ -107,7 +107,17 @@ DATABASES = {
         
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'employeedb',
+#         'USER': 'workflow',
+#         'PASSWORD': '7907920027',
+#         'HOST': 'database-1.c5yeq0ys46v2.ap-southeast-2.rds.amazonaws.com',
+#         'PORT': '3306',
+        
+#     }
+# }
 
 
 # Password validation
