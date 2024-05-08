@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 def CareerPage(request,application_id):
     Jobdetails = JobApplication.objects.get(ApplicationID=application_id)
-    # print(Jobdetails)
     if request.method == 'POST':
         form = ApplicantForm(request.POST, request.FILES)
 

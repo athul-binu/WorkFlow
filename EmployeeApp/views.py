@@ -50,7 +50,6 @@ def EmployeeProject(request):
     for team_member in team_members:
         # team = team_member.TeamID
         team = Team.objects.filter(TeamID=team_member.TeamID_id)   
-        # print(team)
         team_tasks.extend(team)
 
     # projects = Project.objects.filter(EmployeeID=employee)
