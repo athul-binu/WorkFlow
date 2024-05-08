@@ -50,7 +50,7 @@ def EmployeeProject(request):
     for team_member in team_members:
         # team = team_member.TeamID
         team = Team.objects.filter(TeamID=team_member.TeamID_id)   
-        print(team)
+        # print(team)
         team_tasks.extend(team)
 
     # projects = Project.objects.filter(EmployeeID=employee)
@@ -89,8 +89,6 @@ def mark_attendance(request):
 # Update event data with specific class for highlighted dates
     
     # present_dates = Attendance.objects.filter(EmployeeID=employee, Status="Present").values_list('Date', flat=True)
-    for event in present_dates:
-        print(event)
     if request.method == 'POST':
         if attendance:
             messages.error(request, 'Attendance for today is already marked.')
