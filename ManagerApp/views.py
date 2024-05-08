@@ -19,7 +19,6 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         role = request.POST.get('role')
-        # print(username)
         try:
             manager = Manager.objects.get(Username=username)
         except Manager.DoesNotExist:
@@ -44,7 +43,6 @@ def login_view(request):
             if password == manager.Password:
                 # Set session data
                 request.session['username'] = username
-                # print("Session exists:", 'user' in request.session)
                 request.session['role'] = role
                 return redirect('admin_dashboard')
             else:
@@ -53,7 +51,6 @@ def login_view(request):
             if password == manager.Password:
                 # Set session data
                 request.session['username'] = username
-                # print("Session exists:", 'user' in request.session)
                 request.session['role'] = role
                 return redirect('/ManagerDashboard')  # Adjust the URL name as per your project
             else:
@@ -62,7 +59,6 @@ def login_view(request):
             if password == employee.Password:
                 # Set session data
                 request.session['username'] = username
-                # print("Session exists:", 'user' in request.session)
                 request.session['role'] = role
                 return redirect('/EmployeeDashboard')  # Adjust the URL name as per your project
             else:
@@ -221,8 +217,7 @@ def ManagerTeam(request):
         # Extend the list of team members with those from the current project
         team_members.extend(project_team_members)
     
-    # Print the team members for debugging purposes
-    # print(team_members)
+
     
 
     if request.method == 'POST':
@@ -258,7 +253,7 @@ def ManagerTask(request):
     for project in projects:
         manager_tasks = Task.objects.filter(ProjectID=project)
         managertaskdata.extend(manager_tasks)
-        # print(manager_tasks)
+
     
     content ={
         "manager_tasks": managertaskdata,
@@ -289,7 +284,7 @@ def project_overview(request, project_id):
     # Retrieve team related to the project
         # team = Team.objects.filter(TaskID=task.TaskID)
     team = Team.objects.filter(TaskID__ProjectID=project_id)
-    # print("team:",team)
+    
     for team in team:
         team_members = TeamMembers.objects.filter(TeamID=team.TeamID)
             
